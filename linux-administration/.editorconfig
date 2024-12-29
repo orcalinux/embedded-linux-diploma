@@ -1,0 +1,133 @@
+# EditorConfig is awesome: https://editorconfig.org
+
+# Root configuration file
+root = true
+
+# =========================
+# Global Settings
+# =========================
+
+# Apply to all files
+[*]
+# 4 spaces indentation
+indent_style = space
+indent_size = 4
+# Unix-style line endings
+end_of_line = lf
+# UTF-8 encoding
+charset = utf-8
+# Trim any whitespace characters preceding newline
+trim_trailing_whitespace = true
+# Ensure files end with a newline
+insert_final_newline = true
+
+# =========================
+# C/C++ Files
+# =========================
+
+[*.{c,cpp,h,hh,hpp}]
+# Use 4 spaces for indentation
+indent_style = space
+indent_size = 4
+# Enable spaces around operators (if supported by editor)
+# Note: EditorConfig does not support this directly; relies on editor settings
+
+# =========================
+# Makefiles
+# =========================
+
+[Makefile]
+# Use tab for indentation in Makefiles
+indent_style = tab
+# Typically, Makefiles use tabs, so indent_size is ignored
+
+# =========================
+# Shell Scripts
+# =========================
+
+[*.sh]
+# Use 4 spaces for indentation
+indent_style = space
+indent_size = 4
+# Disable trimming trailing whitespace for scripts that may require it
+trim_trailing_whitespace = false
+
+# =========================
+# Python Scripts 
+# =========================
+
+[*.py]
+# Use 4 spaces for indentation
+indent_style = space
+indent_size = 4
+# Maximum line length
+max_line_length = 88
+
+# =========================
+# YAML Files
+# =========================
+
+[*.yaml]
+indent_style = space
+indent_size = 2
+
+[*.yml]
+indent_style = space
+indent_size = 2
+
+# =========================
+# JSON Files
+# =========================
+
+[*.json]
+indent_style = space
+indent_size = 2
+
+# =========================
+# Markdown Files
+# =========================
+
+[*.md]
+# Use 4 spaces for indentation in code blocks
+indent_style = space
+indent_size = 4
+trim_trailing_whitespace = false
+
+# =========================
+# Dockerfiles
+# =========================
+
+[Dockerfile]
+indent_style = space
+indent_size = 4
+
+# =========================
+# LaTeX Files
+# =========================
+
+[*.tex]
+indent_style = space
+indent_size = 4
+
+# =========================
+# Configuration Files
+# =========================
+
+[*.conf]
+indent_style = space
+indent_size = 2
+
+# =========================
+# Additional File Types
+# =========================
+
+# JSON, JavaScript, TypeScript, etc.
+[*.{js,ts,json}]
+indent_style = space
+indent_size = 2
+
+# HTML and CSS
+[*.{html,css}]
+indent_style = space
+indent_size = 2
+
