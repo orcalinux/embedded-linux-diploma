@@ -50,7 +50,7 @@ Follow these steps to get up and running with the Embedded Linux Diploma program
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/Mahmoud-Abdelraouf/Embedded-Linux-Diploma.git
+git clone https://github.com/orcalinux/embedded-linux-diploma.git
 ```
 
 ### 2. Navigate to Respective Modules
@@ -58,7 +58,7 @@ git clone https://github.com/Mahmoud-Abdelraouf/Embedded-Linux-Diploma.git
 Each module is organized into its own directory. Choose the module you wish to start with:
 
 ```bash
-cd Embedded-Linux-Diploma/[module_directory]
+cd embedded-linux-diploma/[module_directory]
 ```
 
 *Replace `[module_directory]` with the desired module folder name (e.g., `kernel-module`, `embedded-linux`, `yocto`, `cpp-module`, `device-drivers`).*
