@@ -61,7 +61,7 @@ Each module is organized into its own directory. Choose the module you wish to s
 cd embedded-linux-diploma/[module_directory]
 ```
 
-*Replace `[module_directory]` with the desired module folder name (e.g., `kernel-module`, `embedded-linux`, `yocto`, `cpp-module`, `device-drivers`).*
+*Replace `[module_directory]` with the desired module folder name (e.g., `linux-administration`, `embedded-linux`, `yocto`, `cpp-module`, `device-drivers`).*
 
 ### 3. Access Learning Materials
 
