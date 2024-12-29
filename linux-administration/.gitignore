@@ -1,0 +1,163 @@
+# =========================
+# General
+# =========================
+
+# Ignore backup and temporary files
+*~
+*.bak
+*.tmp
+*.swp
+
+# Ignore log files
+*.log
+
+# Ignore directories for temporary or build files
+build/
+bin/
+obj/
+out/
+dist/
+tmp/
+temp/
+
+# =========================
+# C/C++
+# =========================
+
+# Ignore object files, binaries, and libraries
+*.o
+*.obj
+*.so
+*.dll
+*.dylib
+*.exe
+*.out
+*.a
+*.lib
+
+# Ignore dependency files
+*.d
+
+# C++ specific
+*.cpp~
+*.hpp~
+
+# =========================
+# CMake
+# =========================
+
+# CMake build files
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+Testing/
+Makefile
+cmake_install.cmake
+*.cmake
+
+# =========================
+# Eclipse
+# =========================
+
+# Eclipse project files
+*.cproject
+*.project
+*.settings/
+*.launch
+
+# =========================
+# Keil
+# =========================
+
+# Keil project files
+*.uvproj
+*.uvprojx
+*.uvopt
+*.d
+
+# =========================
+# Yocto
+# =========================
+
+# Yocto build directories
+/tmp/
+sstate-cache/
+downloads/
+build/
+conf/
+meta-*/
+
+# Ignore temporary Yocto files
+*.tmp
+*.log
+*.stamp
+*.lock
+
+# =========================
+# Buildroot
+# =========================
+
+# Buildroot output directories
+/output/
+/build/
+/.*/ # Hidden buildroot directories
+
+# =========================
+# Raspberry Pi
+# =========================
+
+# Ignore Raspberry Pi build artifacts
+*.img
+*.dtb
+*.cmdline
+*.config
+
+# =========================
+# Visual Studio Code
+# =========================
+
+# VS Code settings
+.vscode/
+
+# =========================
+# Python (if any scripts are used)
+# =========================
+
+# Python compiled files
+__pycache__/
+*.py[cod]
+
+# =========================
+# Other IDEs and Editors
+# =========================
+
+# Vim swap files
+*.swp
+
+# Emacs backup files
+*~
+
+# Sublime Text
+*.sublime-workspace
+*.sublime-project
+
+# Atom
+*.atom
+
+# =========================
+# Miscellaneous
+# =========================
+
+# Ignore compiled Java class files
+*.class
+
+# Ignore environment files
+.env
+.env.*
+
+# =========================
+# Git specific
+# =========================
+
+# Ignore .gitignore itself if necessary
+# /.gitignore
