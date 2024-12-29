@@ -108,6 +108,7 @@ Each module directory contains:
   - [Embedded Linux Wiki](https://elinux.org/Main_Page)
 
 - **Books and Tutorials**
+  - *The Linux Programming Interface* by Michael Kerrisk
   - *Linux Device Drivers* by Jonathan Corbet, Alessandro Rubini, and Greg Kroah-Hartman
   - *Embedded Linux Primer* by Christopher Hallinan
   - [Yocto Project Quick Start](https://www.yoctoproject.org/docs/current/yocto-project-qs/yocto-project-qs.html)
