@@ -112,3 +112,4 @@ Each module directory contains:
   - *Linux Device Drivers* by Jonathan Corbet, Alessandro Rubini, and Greg Kroah-Hartman
   - *Embedded Linux Primer* by Christopher Hallinan
   - [Yocto Project Quick Start](https://docs.yoctoproject.org/2.4.2/yocto-project-qs/yocto-project-qs.html)
+  - [A practical guide to BitBake](https://a4z.gitlab.io/docs/BitBake/guide.html)
