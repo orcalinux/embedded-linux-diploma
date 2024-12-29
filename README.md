@@ -111,4 +111,4 @@ Each module directory contains:
   - *The Linux Programming Interface* by Michael Kerrisk
   - *Linux Device Drivers* by Jonathan Corbet, Alessandro Rubini, and Greg Kroah-Hartman
   - *Embedded Linux Primer* by Christopher Hallinan
-  - [Yocto Project Quick Start](https://www.yoctoproject.org/docs/current/yocto-project-qs/yocto-project-qs.html)
+  - [Yocto Project Quick Start](https://docs.yoctoproject.org/2.4.2/yocto-project-qs/yocto-project-qs.html)
