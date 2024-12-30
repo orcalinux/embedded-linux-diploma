@@ -5,7 +5,7 @@ Welcome to the **Embedded Linux Diploma** program! This repository serves as the
 ## Table of Contents
 
 - [Workshop Content](#workshop-content)
-  - [1. Kernel Module](#1-kernel-module)
+  - [1. Linux Administration](#1-linux-administration)
   - [2. Embedded Linux Module](#2-embedded-linux-module)
   - [3. Yocto Module](#3-yocto-module)
   - [4. C++ Module](#4-c-module)
@@ -17,7 +17,7 @@ Welcome to the **Embedded Linux Diploma** program! This repository serves as the
 
 ## Workshop Content
 
-### 1. Kernel Module
+### 1. Linux Administration 
 - Understanding Linux Kernel Architecture and Spaces
 - Exploring Different Stacks Inside the Kernel
 - Networking and Filesystem Operations
