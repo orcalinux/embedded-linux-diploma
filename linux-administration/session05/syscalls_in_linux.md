@@ -2,31 +2,56 @@
 
 ## **Table of Contents**
 
-1. [Introduction to System Calls](#introduction-to-system-calls)
-2. [Registers for Passing Arguments](#registers-for-passing-arguments)
-   - [System Call Registers for Different Architectures](#system-call-registers-for-different-architectures)
-   - [Argument Registers for Different Architectures](#argument-registers-for-different-architectures)
-3. [Common Syscalls](#common-syscalls)
-   - [read()](#read)
-   - [write()](#write)
-   - [open()](#open)
-   - [close()](#close)
-   - [Additional Common Syscalls](#additional-common-syscalls)
-4. [Syscall Number Definitions](#syscall-number-definitions)
-   - [Finding Syscall Numbers Programmatically](#finding-syscall-numbers-programmatically)
-5. [Demo: Using Syscalls in C](#demo-using-syscalls-in-c)
-   - [Advanced C Examples](#advanced-c-examples)
-6. [Demo: Using Syscalls in Assembly](#demo-using-syscalls-in-assembly)
-   - [Advanced Assembly Examples](#advanced-assembly-examples)
-7. [Error Handling in Syscalls](#error-handling-in-syscalls)
-8. [Tools for Inspecting Syscalls](#tools-for-inspecting-syscalls)
-   - [1. strace](#1-strace)
-   - [2. ltrace](#2-ltrace)
-   - [3. gdb](#3-gdb)
-   - [4. SystemTap](#4-systemtap)
-   - [5. perf](#5-perf)
-9. [Security Implications of Syscalls](#security-implications-of-syscalls)
-10. [Summary](#summary)
+- [**Understanding System Calls in Linux**](#understanding-system-calls-in-linux)
+  - [**Table of Contents**](#table-of-contents)
+  - [**1. Introduction to System Calls**](#1-introduction-to-system-calls)
+    - [**System Call Numbering**](#system-call-numbering)
+  - [**2. Registers for Passing Arguments**](#2-registers-for-passing-arguments)
+    - [**System Call Registers for Different Architectures**](#system-call-registers-for-different-architectures)
+    - [**Argument Registers for Different Architectures**](#argument-registers-for-different-architectures)
+  - [**3. Common Syscalls**](#3-common-syscalls)
+    - [**read()**](#read)
+    - [**write()**](#write)
+    - [**open()**](#open)
+    - [**close()**](#close)
+    - [**Additional Common Syscalls**](#additional-common-syscalls)
+      - [**lseek()**](#lseek)
+      - [**fork()**](#fork)
+      - [**execve()**](#execve)
+      - [**exit()**](#exit)
+  - [**4. Syscall Number Definitions**](#4-syscall-number-definitions)
+    - [**Locating Syscall Numbers**](#locating-syscall-numbers)
+    - [**Finding Syscall Numbers Programmatically**](#finding-syscall-numbers-programmatically)
+    - [**Understanding the Definitions**](#understanding-the-definitions)
+  - [**5. Demo: Using Syscalls in C**](#5-demo-using-syscalls-in-c)
+    - [**Basic Example: Using `read`, `write`, and `open` Syscalls**](#basic-example-using-read-write-and-open-syscalls)
+    - [**Advanced C Examples**](#advanced-c-examples)
+      - [**Example 1: Using `fork` and `execve` Syscalls**](#example-1-using-fork-and-execve-syscalls)
+      - [**Example 2: Using `mmap` and `munmap` Syscalls**](#example-2-using-mmap-and-munmap-syscalls)
+      - [**Example 3: Using `getpid` Syscall**](#example-3-using-getpid-syscall)
+  - [**6. Demo: Using Syscalls in Assembly**](#6-demo-using-syscalls-in-assembly)
+    - [**Basic Example: Writing to stdout and Exiting**](#basic-example-writing-to-stdout-and-exiting)
+    - [**Advanced Assembly Examples**](#advanced-assembly-examples)
+      - [**Example 1: Reading from stdin and Writing to stdout**](#example-1-reading-from-stdin-and-writing-to-stdout)
+      - [**Example 2: Creating a New File and Writing Data**](#example-2-creating-a-new-file-and-writing-data)
+  - [**7. Error Handling in Syscalls**](#7-error-handling-in-syscalls)
+    - [**Understanding Return Values**](#understanding-return-values)
+    - [**Handling Errors in C**](#handling-errors-in-c)
+    - [**Common `errno` Values**](#common-errno-values)
+    - [**Error Handling in Assembly**](#error-handling-in-assembly)
+  - [**8. Tools for Inspecting Syscalls**](#8-tools-for-inspecting-syscalls)
+    - [**1. strace**](#1-strace)
+    - [**2. ltrace**](#2-ltrace)
+    - [**3. gdb**](#3-gdb)
+    - [**4. SystemTap**](#4-systemtap)
+    - [**5. perf**](#5-perf)
+  - [**9. Security Implications of Syscalls**](#9-security-implications-of-syscalls)
+    - [**Potential Security Risks**](#potential-security-risks)
+    - [**Mitigation Strategies**](#mitigation-strategies)
+    - [**Example: Preventing Unauthorized File Access**](#example-preventing-unauthorized-file-access)
+    - [**Best Practices for Secure Syscall Usage**](#best-practices-for-secure-syscall-usage)
+  - [**9. Summary**](#9-summary)
+- [Additional Resources](#additional-resources)
 
 ---
 
@@ -34,11 +59,11 @@
 
 In Linux, **system calls** are the primary interface between user-space applications and the kernel. They allow programs to request services such as:
 
-- **File Operations**: Reading from or writing to files.
-- **Process Control**: Creating or terminating processes.
-- **Memory Management**: Allocating or freeing memory.
-- **Networking**: Sending or receiving data over networks.
-- **Device Management**: Interacting with hardware devices.
+-   **File Operations**: Reading from or writing to files.
+-   **Process Control**: Creating or terminating processes.
+-   **Memory Management**: Allocating or freeing memory.
+-   **Networking**: Sending or receiving data over networks.
+-   **Device Management**: Interacting with hardware devices.
 
 When an application invokes a system call, it triggers a controlled transition from **user space** to **kernel space**, ensuring that operations are performed securely and efficiently.
 
@@ -48,9 +73,9 @@ Each system call in Linux is assigned a unique number, known as the **syscall nu
 
 **Example**:
 
-- `read` syscall number on x86_64: `0`
-- `write` syscall number on x86_64: `1`
-- `open` syscall number on x86_64: `2`
+-   `read` syscall number on x86_64: `0`
+-   `write` syscall number on x86_64: `1`
+-   `open` syscall number on x86_64: `2`
 
 Syscall numbering varies across different architectures, which allows the same kernel source to support multiple hardware platforms.
 
@@ -87,9 +112,9 @@ System calls use CPU **registers** to pass arguments from user space to the kern
 
 **Key Points**:
 
-- **System Call Number**: Placed in a designated register (e.g., `rax` for x86_64).
-- **Return Value**: Typically returned in the same register used for the syscall number.
-- **Error Handling**: Errors are often indicated by negative return values or specific error registers.
+-   **System Call Number**: Placed in a designated register (e.g., `rax` for x86_64).
+-   **Return Value**: Typically returned in the same register used for the syscall number.
+-   **Error Handling**: Errors are often indicated by negative return values or specific error registers.
 
 ### **Argument Registers for Different Architectures**
 
@@ -103,10 +128,10 @@ System calls use CPU **registers** to pass arguments from user space to the kern
 
 **Example**:
 
-- **x86_64** `read` syscall (`sys_read`):
-  - `rdi`: File descriptor (`fd`)
-  - `rsi`: Buffer pointer (`buf`)
-  - `rdx`: Number of bytes to read (`count`)
+-   **x86_64** `read` syscall (`sys_read`):
+    -   `rdi`: File descriptor (`fd`)
+    -   `rsi`: Buffer pointer (`buf`)
+    -   `rdx`: Number of bytes to read (`count`)
 
 ---
 
@@ -124,20 +149,20 @@ The `read` syscall reads data from a file descriptor into a buffer.
 ssize_t read(int fd, void *buf, size_t count);
 ```
 
-- **Parameters**:
-  - `fd`: The file descriptor to read from.
-  - `buf`: Pointer to the buffer where data will be stored.
-  - `count`: Maximum number of bytes to read.
+-   **Parameters**:
+    -   `fd`: The file descriptor to read from.
+    -   `buf`: Pointer to the buffer where data will be stored.
+    -   `count`: Maximum number of bytes to read.
 
 **System Call Number**:
 
-- **x86_64**: `SYS_read` = `0`
+-   **x86_64**: `SYS_read` = `0`
 
 **Registers for `read()`**:
 
-- `rdi`: `fd` (file descriptor)
-- `rsi`: `buf` (buffer to store data)
-- `rdx`: `count` (number of bytes to read)
+-   `rdi`: `fd` (file descriptor)
+-   `rsi`: `buf` (buffer to store data)
+-   `rdx`: `count` (number of bytes to read)
 
 **Example Usage in C**:
 
@@ -201,20 +226,20 @@ The `write` syscall writes data from a buffer to a file descriptor.
 ssize_t write(int fd, const void *buf, size_t count);
 ```
 
-- **Parameters**:
-  - `fd`: The file descriptor to write to.
-  - `buf`: Pointer to the buffer containing data to write.
-  - `count`: Number of bytes to write.
+-   **Parameters**:
+    -   `fd`: The file descriptor to write to.
+    -   `buf`: Pointer to the buffer containing data to write.
+    -   `count`: Number of bytes to write.
 
 **System Call Number**:
 
-- **x86_64**: `SYS_write` = `1`
+-   **x86_64**: `SYS_write` = `1`
 
 **Registers for `write()`**:
 
-- `rdi`: `fd` (file descriptor)
-- `rsi`: `buf` (buffer with data to write)
-- `rdx`: `count` (number of bytes to write)
+-   `rdi`: `fd` (file descriptor)
+-   `rsi`: `buf` (buffer with data to write)
+-   `rdx`: `count` (number of bytes to write)
 
 **Example Usage in C**:
 
@@ -281,20 +306,20 @@ The `open` syscall opens a file and returns a file descriptor.
 int open(const char *pathname, int flags, mode_t mode);
 ```
 
-- **Parameters**:
-  - `pathname`: Path to the file to open.
-  - `flags`: File access options (e.g., `O_RDONLY`, `O_WRONLY`, `O_CREAT`).
-  - `mode`: Permissions to use if a new file is created (e.g., `0644`).
+-   **Parameters**:
+    -   `pathname`: Path to the file to open.
+    -   `flags`: File access options (e.g., `O_RDONLY`, `O_WRONLY`, `O_CREAT`).
+    -   `mode`: Permissions to use if a new file is created (e.g., `0644`).
 
 **System Call Number**:
 
-- **x86_64**: `SYS_open` = `2`
+-   **x86_64**: `SYS_open` = `2`
 
 **Registers for `open()`**:
 
-- `rdi`: `pathname` (path to the file)
-- `rsi`: `flags` (file access mode)
-- `rdx`: `mode` (file permissions, if `O_CREAT` is specified)
+-   `rdi`: `pathname` (path to the file)
+-   `rsi`: `flags` (file access mode)
+-   `rdx`: `mode` (file permissions, if `O_CREAT` is specified)
 
 **Example Usage in C**:
 
@@ -360,16 +385,16 @@ The `close` syscall closes an open file descriptor.
 int close(int fd);
 ```
 
-- **Parameters**:
-  - `fd`: The file descriptor to close.
+-   **Parameters**:
+    -   `fd`: The file descriptor to close.
 
 **System Call Number**:
 
-- **x86_64**: `SYS_close` = `3`
+-   **x86_64**: `SYS_close` = `3`
 
 **Registers for `close()`**:
 
-- `rdi`: `fd` (file descriptor)
+-   `rdi`: `fd` (file descriptor)
 
 **Example Usage in C**:
 
@@ -440,20 +465,20 @@ Repositions the file offset of an open file descriptor.
 off_t lseek(int fd, off_t offset, int whence);
 ```
 
-- **Parameters**:
-  - `fd`: The file descriptor.
-  - `offset`: The offset to set.
-  - `whence`: Position from where to set the offset (`SEEK_SET`, `SEEK_CUR`, `SEEK_END`).
+-   **Parameters**:
+    -   `fd`: The file descriptor.
+    -   `offset`: The offset to set.
+    -   `whence`: Position from where to set the offset (`SEEK_SET`, `SEEK_CUR`, `SEEK_END`).
 
 **System Call Number**:
 
-- **x86_64**: `SYS_lseek` = `8`
+-   **x86_64**: `SYS_lseek` = `8`
 
 **Registers for `lseek()`**:
 
-- `rdi`: `fd`
-- `rsi`: `offset`
-- `rdx`: `whence`
+-   `rdi`: `fd`
+-   `rsi`: `offset`
+-   `rdx`: `whence`
 
 **Example Usage in C**:
 
@@ -495,18 +520,18 @@ Creates a new process by duplicating the calling process.
 pid_t fork(void);
 ```
 
-- **Returns**:
-  - `0` in the child process.
-  - Child's PID in the parent process.
-  - `-1` on failure.
+-   **Returns**:
+    -   `0` in the child process.
+    -   Child's PID in the parent process.
+    -   `-1` on failure.
 
 **System Call Number**:
 
-- **x86_64**: `SYS_fork` = `57`
+-   **x86_64**: `SYS_fork` = `57`
 
 **Registers for `fork()`**:
 
-- No arguments are passed.
+-   No arguments are passed.
 
 **Example Usage in C**:
 
@@ -542,20 +567,20 @@ Executes a program, replacing the current process image.
 int execve(const char *pathname, char *const argv[], char *const envp[]);
 ```
 
-- **Parameters**:
-  - `pathname`: Path to the executable.
-  - `argv`: Argument vector.
-  - `envp`: Environment variables.
+-   **Parameters**:
+    -   `pathname`: Path to the executable.
+    -   `argv`: Argument vector.
+    -   `envp`: Environment variables.
 
 **System Call Number**:
 
-- **x86_64**: `SYS_execve` = `59`
+-   **x86_64**: `SYS_execve` = `59`
 
 **Registers for `execve()`**:
 
-- `rdi`: `pathname`
-- `rsi`: `argv`
-- `rdx`: `envp`
+-   `rdi`: `pathname`
+-   `rsi`: `argv`
+-   `rdx`: `envp`
 
 **Example Usage in C**:
 
@@ -588,16 +613,16 @@ Terminates the calling process.
 void exit(int status);
 ```
 
-- **Parameters**:
-  - `status`: Exit status code.
+-   **Parameters**:
+    -   `status`: Exit status code.
 
 **System Call Number**:
 
-- **x86_64**: `SYS_exit` = `60`
+-   **x86_64**: `SYS_exit` = `60`
 
 **Registers for `exit()`**:
 
-- `rdi`: `status`
+-   `rdi`: `status`
 
 **Example Usage in C**:
 
@@ -622,9 +647,9 @@ Syscall numbers are defined in Linux kernel header files. These definitions are 
 
 ### **Locating Syscall Numbers**
 
-- **Header Files**: Syscall numbers are defined in `unistd.h` or architecture-specific unistd files.
-  - **x86_64**: `/usr/include/asm/unistd_64.h` or `/usr/include/x86_64-linux-gnu/asm/unistd_64.h`
-  - **i386**: `/usr/include/asm/unistd.h` or `/usr/include/i386-linux-gnu/asm/unistd.h`
+-   **Header Files**: Syscall numbers are defined in `unistd.h` or architecture-specific unistd files.
+    -   **x86_64**: `/usr/include/asm/unistd_64.h` or `/usr/include/x86_64-linux-gnu/asm/unistd_64.h`
+    -   **i386**: `/usr/include/asm/unistd.h` or `/usr/include/i386-linux-gnu/asm/unistd.h`
 
 **Example**:
 
@@ -641,16 +666,16 @@ Syscall numbers are defined in Linux kernel header files. These definitions are 
 
 ### **Finding Syscall Numbers Programmatically**
 
-You can use the `syscall` utility or inspect the `unistd.h` headers to find syscall numbers.
+You can inspect syscall numbers directly from system headers or use the `ausyscall` utility.
 
-**Using `syscall` Utility**:
+**Using `ausyscall` Utility**:
 
 ```bash
-# Install syscall utility if not already installed
-sudo apt-get install syscall
+# Install auditd to get ausyscall if not already installed
+sudo apt-get install auditd
 
 # List syscall numbers for x86_64
-syscall --arch=x86_64 --list
+ausyscall x86_64 --dump
 ```
 
 **Using `grep` to Find Syscall Numbers in Headers**:
@@ -700,8 +725,8 @@ Each syscall number corresponds to a unique operation in the kernel. These numbe
 
 **Example**:
 
-- `__NR_read`: System call number for the `read` syscall.
-- `__NR_write`: System call number for the `write` syscall.
+-   `__NR_read`: System call number for the `read` syscall.
+-   `__NR_write`: System call number for the `write` syscall.
 
 **C Code Example**:
 
@@ -775,15 +800,15 @@ int main() {
 
 1. **Compile** the program:
 
-   ```bash
-   gcc syscall_demo.c -o syscall_demo
-   ```
+    ```bash
+    gcc syscall_demo.c -o syscall_demo
+    ```
 
 2. **Run** the program:
 
-   ```bash
-   ./syscall_demo
-   ```
+    ```bash
+    ./syscall_demo
+    ```
 
 **Expected Output**:
 
@@ -793,8 +818,8 @@ Read from file: Hello, syscall!
 
 **Explanation**:
 
-- The program uses the `syscall` function to invoke `open`, `write`, `read`, and `close` syscalls directly.
-- It creates a file named `test.txt`, writes "Hello, syscall!" to it, reads the content back, and prints it to the standard output.
+-   The program uses the `syscall` function to invoke `open`, `write`, `read`, and `close` syscalls directly.
+-   It creates a file named `test.txt`, writes "Hello, syscall!" to it, reads the content back, and prints it to the standard output.
 
 ### **Advanced C Examples**
 
@@ -836,9 +861,9 @@ int main() {
 
 **Explanation**:
 
-- **`fork`**: Creates a new child process.
-- **Child Process**: Uses `execve` to replace its image with `/bin/ls`.
-- **Parent Process**: Waits for the child to complete using `wait4` syscall.
+-   **`fork`**: Creates a new child process.
+-   **Child Process**: Uses `execve` to replace its image with `/bin/ls`.
+-   **Parent Process**: Waits for the child to complete using `wait4` syscall.
 
 **Note**: The `wait4` syscall is not defined in the earlier syscall number definitions. Ensure to include its correct number or use a higher-level function.
 
@@ -880,9 +905,9 @@ int main() {
 
 **Explanation**:
 
-- **`mmap`**: Maps a memory region that can be read and written.
-- **Writing to Memory**: Writes a string to the mapped memory.
-- **`munmap`**: Unmaps the previously mapped memory region.
+-   **`mmap`**: Maps a memory region that can be read and written.
+-   **Writing to Memory**: Writes a string to the mapped memory.
+-   **`munmap`**: Unmaps the previously mapped memory region.
 
 #### **Example 3: Using `getpid` Syscall**
 
@@ -904,7 +929,7 @@ int main() {
 
 **Explanation**:
 
-- The program uses the `getpid` syscall to retrieve and print the current process ID.
+-   The program uses the `getpid` syscall to retrieve and print the current process ID.
 
 ---
 
@@ -947,16 +972,16 @@ _start:
 
 2. **Assemble and Link** the program using NASM and `ld`:
 
-   ```bash
-   nasm -f elf64 syscall_demo.asm -o syscall_demo.o
-   ld syscall_demo.o -o syscall_demo
-   ```
+    ```bash
+    nasm -f elf64 syscall_demo.asm -o syscall_demo.o
+    ld syscall_demo.o -o syscall_demo
+    ```
 
 3. **Run** the program:
 
-   ```bash
-   ./syscall_demo
-   ```
+    ```bash
+    ./syscall_demo
+    ```
 
 **Expected Output**:
 
@@ -966,23 +991,23 @@ Hello, syscall!
 
 **Explanation**:
 
-- **Data Section**:
+-   **Data Section**:
 
-  - `msg`: Contains the string "Hello, syscall!\n".
-  - `len`: Calculates the length of `msg`.
+    -   `msg`: Contains the string "Hello, syscall!\n".
+    -   `len`: Calculates the length of `msg`.
 
-- **Text Section**:
-  - `_start`: Entry point of the program.
-  - **Write Syscall**:
-    - `rax = 1`: `SYS_write`
-    - `rdi = 1`: File descriptor for stdout.
-    - `rsi = msg`: Pointer to the message.
-    - `rdx = len`: Length of the message.
-    - `syscall`: Invokes the syscall.
-  - **Exit Syscall**:
-    - `rax = 60`: `SYS_exit`
-    - `rdi = 0`: Exit status.
-    - `syscall`: Invokes the syscall to terminate the program.
+-   **Text Section**:
+    -   `_start`: Entry point of the program.
+    -   **Write Syscall**:
+        -   `rax = 1`: `SYS_write`
+        -   `rdi = 1`: File descriptor for stdout.
+        -   `rsi = msg`: Pointer to the message.
+        -   `rdx = len`: Length of the message.
+        -   `syscall`: Invokes the syscall.
+    -   **Exit Syscall**:
+        -   `rax = 60`: `SYS_exit`
+        -   `rdi = 0`: Exit status.
+        -   `syscall`: Invokes the syscall to terminate the program.
 
 ### **Advanced Assembly Examples**
 
@@ -1037,16 +1062,16 @@ _start:
 
 1. **Assemble and Link**:
 
-   ```bash
-   nasm -f elf64 echo.asm -o echo.o
-   ld echo.o -o echo
-   ```
+    ```bash
+    nasm -f elf64 echo.asm -o echo.o
+    ld echo.o -o echo
+    ```
 
 2. **Run** the program:
 
-   ```bash
-   ./echo
-   ```
+    ```bash
+    ./echo
+    ```
 
 **Sample Interaction**:
 
@@ -1057,10 +1082,10 @@ Hello from assembly!
 
 **Explanation**:
 
-- **Prompt**: Writes "Enter text: " to stdout.
-- **Read**: Reads up to 128 bytes from stdin into `buffer`.
-- **Echo**: Writes the read bytes back to stdout.
-- **Exit**: Terminates the program with status `0`.
+-   **Prompt**: Writes "Enter text: " to stdout.
+-   **Read**: Reads up to 128 bytes from stdin into `buffer`.
+-   **Echo**: Writes the read bytes back to stdout.
+-   **Exit**: Terminates the program with status `0`.
 
 #### **Example 2: Creating a New File and Writing Data**
 
@@ -1109,22 +1134,22 @@ _start:
 
 1. **Assemble and Link**:
 
-   ```bash
-   nasm -f elf64 create_write.asm -o create_write.o
-   ld create_write.o -o create_write
-   ```
+    ```bash
+    nasm -f elf64 create_write.asm -o create_write.o
+    ld create_write.o -o create_write
+    ```
 
 2. **Run** the program:
 
-   ```bash
-   ./create_write
-   ```
+    ```bash
+    ./create_write
+    ```
 
 3. **Verify** the File Content:
 
-   ```bash
-   cat assembly_output.txt
-   ```
+    ```bash
+    cat assembly_output.txt
+    ```
 
 **Expected Output in `assembly_output.txt`**:
 
@@ -1134,10 +1159,10 @@ Data written via assembly.
 
 **Explanation**:
 
-- **Open**: Creates `assembly_output.txt` with write permissions.
-- **Write**: Writes the message to the file.
-- **Close**: Closes the file descriptor.
-- **Exit**: Terminates the program.
+-   **Open**: Creates `assembly_output.txt` with write permissions.
+-   **Write**: Writes the message to the file.
+-   **Close**: Closes the file descriptor.
+-   **Exit**: Terminates the program.
 
 ---
 
@@ -1147,10 +1172,10 @@ Proper error handling is crucial when working with syscalls to ensure robust and
 
 ### **Understanding Return Values**
 
-- **Success**: Returns a non-negative value.
-  - For `read` and `write`: Number of bytes read or written.
-  - For `open`: File descriptor.
-- **Error**: Returns `-1` and sets `errno` to an error code.
+-   **Success**: Returns a non-negative value.
+    -   For `read` and `write`: Number of bytes read or written.
+    -   For `open`: File descriptor.
+-   **Error**: Returns `-1` and sets `errno` to an error code.
 
 ### **Handling Errors in C**
 
@@ -1198,9 +1223,9 @@ int main() {
 
 **Explanation**:
 
-- Attempts to open a non-existent file, triggering an error.
-- Uses `strerror(errno)` to print a human-readable error message.
-- Ensures that resources are properly released even in error conditions.
+-   Attempts to open a non-existent file, triggering an error.
+-   Uses `strerror(errno)` to print a human-readable error message.
+-   Ensures that resources are properly released even in error conditions.
 
 ### **Common `errno` Values**
 
@@ -1244,8 +1269,8 @@ int main() {
 
 **Explanation**:
 
-- Specifically checks for `ENOENT` to provide a tailored error message.
-- Provides better context to the user based on the error type.
+-   Specifically checks for `ENOENT` to provide a tailored error message.
+-   Provides better context to the user based on the error type.
 
 ### **Error Handling in Assembly**
 
@@ -1288,29 +1313,29 @@ write_success:
 
 **Explanation**:
 
-- Performs the `write` syscall.
-- Compares the return value in `rax` to `-1` to detect errors.
-- Exits with status `1` if an error occurs, otherwise exits with status `0`.
+-   Performs the `write` syscall.
+-   Compares the return value in `rax` to `-1` to detect errors.
+-   Exits with status `1` if an error occurs, otherwise exits with status `0`.
 
 **Compilation and Running**
 
 1. **Assemble and Link**:
 
-   ```bash
-   nasm -f elf64 write_exit.asm -o write_exit.o
-   ld write_exit.o -o write_exit
-   ```
+    ```bash
+    nasm -f elf64 write_exit.asm -o write_exit.o
+    ld write_exit.o -o write_exit
+    ```
 
 2. **Run** the program:
 
-   ```bash
-   ./write_exit
-   ```
+    ```bash
+    ./write_exit
+    ```
 
 **Behavior**:
 
-- If `write` succeeds, the program exits with status `0`.
-- If `write` fails, the program exits with status `1`.
+-   If `write` succeeds, the program exits with status `0`.
+-   If `write` fails, the program exits with status `1`.
 
 ---
 
@@ -1346,11 +1371,11 @@ close(3) = 0
 
 **Common Options**:
 
-- `-e trace=<syscalls>`: Trace specific syscalls.
-  - Example: `-e trace=read,write`
-- `-o <file>`: Output trace to a file.
-  - Example: `-o trace.log`
-- `-c`: Count time, calls, and errors for each syscall.
+-   `-e trace=<syscalls>`: Trace specific syscalls.
+    -   Example: `-e trace=read,write`
+-   `-o <file>`: Output trace to a file.
+    -   Example: `-o trace.log`
+-   `-c`: Count time, calls, and errors for each syscall.
 
 **Example with Options**:
 
@@ -1376,16 +1401,16 @@ ltrace ./syscall_demo
 
 **Common Options**:
 
-- `-e <library_functions>`: Trace specific library functions.
-  - Example: `-e open,read,write,close`
-- `-o <file>`: Output trace to a file.
-  - Example: `-o library_trace.log`
+-   `-e <library_functions>`: Trace specific library functions.
+    -   Example: `-e open,read,write,close`
+-   `-o <file>`: Output trace to a file.
+    -   Example: `-o library_trace.log`
 
 **Comparison with strace**:
 
-- `strace` focuses on system calls.
-- `ltrace` focuses on library calls.
-- Both can be used together for comprehensive tracing.
+-   `strace` focuses on system calls.
+-   `ltrace` focuses on library calls.
+-   Both can be used together for comprehensive tracing.
 
 ### **3. gdb**
 
@@ -1405,44 +1430,44 @@ gdb ./syscall_demo
 
 **Common Commands**:
 
-- `break <location>`: Set a breakpoint.
-  - Example: `break main`
-- `run`: Start the program.
-- `step`: Step into functions.
-- `next`: Step over functions.
-- `continue`: Continue execution.
-- `print <variable>`: Print the value of a variable.
-- `info registers`: Display register values.
+-   `break <location>`: Set a breakpoint.
+    -   Example: `break main`
+-   `run`: Start the program.
+-   `step`: Step into functions.
+-   `next`: Step over functions.
+-   `continue`: Continue execution.
+-   `print <variable>`: Print the value of a variable.
+-   `info registers`: Display register values.
 
 **Tracing Syscalls with gdb**:
 
 1. **Set Breakpoints on Syscall Instructions**:
 
-   - For `x86_64`, set a breakpoint on the `syscall` instruction.
+    - For `x86_64`, set a breakpoint on the `syscall` instruction.
 
-   ```gdb
-   (gdb) break syscall
-   ```
+    ```gdb
+    (gdb) break syscall
+    ```
 
 2. **Run the Program**:
 
-   ```gdb
-   (gdb) run
-   ```
+    ```gdb
+    (gdb) run
+    ```
 
 3. **Inspect Registers**:
 
-   - When a syscall is hit, inspect the registers to see syscall number and arguments.
+    - When a syscall is hit, inspect the registers to see syscall number and arguments.
 
-   ```gdb
-   (gdb) info registers
-   ```
+    ```gdb
+    (gdb) info registers
+    ```
 
 4. **Continue Execution**:
 
-   ```gdb
-   (gdb) continue
-   ```
+    ```gdb
+    (gdb) continue
+    ```
 
 **Example Session**:
 
@@ -1484,9 +1509,9 @@ sudo stap -e 'probe syscall.write { printf("write called with fd=%d, count=%d\n"
 
 **Features**:
 
-- **Probes**: Define points of interest (e.g., specific syscalls).
-- **Scripts**: Write custom scripts to collect and display data.
-- **Flexibility**: Can monitor a wide range of kernel and user-space activities.
+-   **Probes**: Define points of interest (e.g., specific syscalls).
+-   **Scripts**: Write custom scripts to collect and display data.
+-   **Flexibility**: Can monitor a wide range of kernel and user-space activities.
 
 **Advanced Example**: Monitoring All Syscalls and Logging Their Arguments
 
@@ -1500,9 +1525,9 @@ probe syscall.* {
 
 **Explanation**:
 
-- **`probe syscall.*`**: Attaches to all syscall probes.
-- **`probefunc()`**: Retrieves the name of the current syscall.
-- **`argstr()`**: Retrieves the arguments passed to the syscall.
+-   **`probe syscall.*`**: Attaches to all syscall probes.
+-   **`probefunc()`**: Retrieves the name of the current syscall.
+-   **`argstr()`**: Retrieves the arguments passed to the syscall.
 
 ### **5. perf**
 
@@ -1522,33 +1547,33 @@ perf trace ./syscall_demo
 
 **Common Features**:
 
-- **Profiling**: Measure CPU usage, cache misses, etc.
-- **Tracing**: Trace syscalls and other kernel events.
-- **Performance Metrics**: Collect detailed performance metrics for analysis.
+-   **Profiling**: Measure CPU usage, cache misses, etc.
+-   **Tracing**: Trace syscalls and other kernel events.
+-   **Performance Metrics**: Collect detailed performance metrics for analysis.
 
 **Advanced Usage**: Recording and Analyzing Syscalls
 
 1. **Record Syscalls**:
 
-   ```bash
-   perf record -e syscalls:sys_enter_write -aR ./syscall_demo
-   ```
+    ```bash
+    perf record -e syscalls:sys_enter_write -aR ./syscall_demo
+    ```
 
 2. **Analyze the Record**:
 
-   ```bash
-   perf report
-   ```
+    ```bash
+    perf report
+    ```
 
 **Explanation**:
 
-- **`-e syscalls:sys_enter_write`**: Event to record when the `write` syscall is entered.
-- **`-a`**: System-wide collection.
-- **`-R`**: Raw sampling.
+-   **`-e syscalls:sys_enter_write`**: Event to record when the `write` syscall is entered.
+-   **`-a`**: System-wide collection.
+-   **`-R`**: Raw sampling.
 
 **Visualization**:
 
-- `perf report` provides a graphical interface to analyze the recorded data.
+-   `perf report` provides a graphical interface to analyze the recorded data.
 
 ---
 
@@ -1560,51 +1585,51 @@ System calls are integral to the operation of user-space applications and the ke
 
 1. **Privilege Escalation**:
 
-   - Exploiting syscalls that require elevated privileges to perform unauthorized actions.
-   - Example: Abusing `setuid` or `execve` to gain higher privileges.
+    - Exploiting syscalls that require elevated privileges to perform unauthorized actions.
+    - Example: Abusing `setuid` or `execve` to gain higher privileges.
 
 2. **Denial of Service (DoS)**:
 
-   - Using syscalls to exhaust system resources.
-   - Example: Flooding the system with `fork` calls to create excessive processes.
+    - Using syscalls to exhaust system resources.
+    - Example: Flooding the system with `fork` calls to create excessive processes.
 
 3. **Buffer Overflows**:
 
-   - Malicious inputs to syscalls like `read` or `write` can lead to buffer overflows if not properly handled.
+    - Malicious inputs to syscalls like `read` or `write` can lead to buffer overflows if not properly handled.
 
 4. **Race Conditions**:
 
-   - Exploiting the timing of syscalls to manipulate system state.
-   - Example: TOCTOU (Time of Check to Time of Use) vulnerabilities in file operations.
+    - Exploiting the timing of syscalls to manipulate system state.
+    - Example: TOCTOU (Time of Check to Time of Use) vulnerabilities in file operations.
 
 5. **Information Leakage**:
-   - Accessing sensitive information via syscalls.
-   - Example: Using `ptrace` to inspect another process's memory.
+    - Accessing sensitive information via syscalls.
+    - Example: Using `ptrace` to inspect another process's memory.
 
 ### **Mitigation Strategies**
 
 1. **Least Privilege Principle**:
 
-   - Run applications with the minimum necessary privileges to reduce the impact of potential exploits.
+    - Run applications with the minimum necessary privileges to reduce the impact of potential exploits.
 
 2. **Input Validation**:
 
-   - Validate all inputs passed to syscalls to prevent buffer overflows and other injection attacks.
+    - Validate all inputs passed to syscalls to prevent buffer overflows and other injection attacks.
 
 3. **Use of Safe APIs**:
 
-   - Prefer higher-level, safer APIs over direct syscall invocations where possible, as they often include built-in safety checks.
+    - Prefer higher-level, safer APIs over direct syscall invocations where possible, as they often include built-in safety checks.
 
 4. **Monitoring and Auditing**:
 
-   - Use tools like `strace`, `auditd`, and `SELinux` to monitor syscall usage and enforce security policies.
+    - Use tools like `strace`, `auditd`, and `SELinux` to monitor syscall usage and enforce security policies.
 
 5. **Kernel Hardening**:
 
-   - Apply kernel patches and use security modules (e.g., SELinux, AppArmor) to restrict syscall access.
+    - Apply kernel patches and use security modules (e.g., SELinux, AppArmor) to restrict syscall access.
 
 6. **Avoid Unnecessary Syscalls**:
-   - Reduce the attack surface by minimizing the number of syscalls an application makes, especially those that modify system state.
+    - Reduce the attack surface by minimizing the number of syscalls an application makes, especially those that modify system state.
 
 ### **Example: Preventing Unauthorized File Access**
 
@@ -1640,11 +1665,11 @@ int main(int argc, char *argv[]) {
 
 **Potential Exploit**:
 
-- An attacker can specify `/etc/passwd` or other sensitive files to read unauthorized data.
+-   An attacker can specify `/etc/passwd` or other sensitive files to read unauthorized data.
 
 **Mitigation**:
 
-- Implement input validation to restrict accessible files.
+-   Implement input validation to restrict accessible files.
 
 **Secure C Code Example**:
 
@@ -1686,30 +1711,30 @@ int main(int argc, char *argv[]) {
 
 **Explanation**:
 
-- Restricts file access to a specific directory by validating the input path.
-- Prevents access to sensitive system files outside the allowed directory.
+-   Restricts file access to a specific directory by validating the input path.
+-   Prevents access to sensitive system files outside the allowed directory.
 
 ### **Best Practices for Secure Syscall Usage**
 
 1. **Minimize Privileged Operations**:
 
-   - Limit the use of syscalls that require elevated privileges.
-   - Drop privileges as soon as they are no longer needed.
+    - Limit the use of syscalls that require elevated privileges.
+    - Drop privileges as soon as they are no longer needed.
 
 2. **Use Secure Coding Standards**:
 
-   - Follow secure coding guidelines to prevent common vulnerabilities.
+    - Follow secure coding guidelines to prevent common vulnerabilities.
 
 3. **Regularly Update Software**:
 
-   - Keep the kernel and system libraries updated to benefit from security patches.
+    - Keep the kernel and system libraries updated to benefit from security patches.
 
 4. **Employ Security Tools**:
 
-   - Use static and dynamic analysis tools to detect potential vulnerabilities in code.
+    - Use static and dynamic analysis tools to detect potential vulnerabilities in code.
 
 5. **Educate Developers**:
-   - Train developers on secure programming practices and the implications of syscalls.
+    - Train developers on secure programming practices and the implications of syscalls.
 
 ---
 
@@ -1719,42 +1744,42 @@ This comprehensive guide explored the intricacies of system calls in Linux, delv
 
 1. **System Calls**:
 
-   - Fundamental interface between user-space applications and the kernel.
-   - Enable operations like file management, process control, memory allocation, and more.
+    - Fundamental interface between user-space applications and the kernel.
+    - Enable operations like file management, process control, memory allocation, and more.
 
 2. **Registers**:
 
-   - Syscalls use specific CPU registers to pass arguments, varying across architectures.
-   - Understanding register conventions is crucial for low-level programming.
+    - Syscalls use specific CPU registers to pass arguments, varying across architectures.
+    - Understanding register conventions is crucial for low-level programming.
 
 3. **Common Syscalls**:
 
-   - Detailed explanations and examples for essential syscalls: `read`, `write`, `open`, `close`.
-   - Additional common syscalls like `lseek`, `fork`, `execve`, and `exit` were also covered.
+    - Detailed explanations and examples for essential syscalls: `read`, `write`, `open`, `close`.
+    - Additional common syscalls like `lseek`, `fork`, `execve`, and `exit` were also covered.
 
 4. **Syscall Number Definitions**:
 
-   - Syscall numbers are architecture-specific and defined in kernel headers.
-   - Methods to locate and utilize syscall numbers programmatically.
+    - Syscall numbers are architecture-specific and defined in kernel headers.
+    - Methods to locate and utilize syscall numbers programmatically.
 
 5. **Demos**:
 
-   - **C Programming**: Directly invoking syscalls using the `syscall()` function with basic and advanced examples.
-   - **Assembly Programming**: Crafting syscalls in x86_64 NASM syntax with examples for writing to stdout, reading input, and file operations.
+    - **C Programming**: Directly invoking syscalls using the `syscall()` function with basic and advanced examples.
+    - **Assembly Programming**: Crafting syscalls in x86_64 NASM syntax with examples for writing to stdout, reading input, and file operations.
 
 6. **Error Handling**:
 
-   - Importance of handling syscall errors to ensure application robustness.
-   - Techniques for detecting and responding to errors in both C and assembly.
+    - Importance of handling syscall errors to ensure application robustness.
+    - Techniques for detecting and responding to errors in both C and assembly.
 
 7. **Tools**:
 
-   - Introduction to powerful tools like `strace`, `ltrace`, `gdb`, `SystemTap`, and `perf` for inspecting and debugging syscalls.
-   - Practical examples demonstrating the usage of these tools.
+    - Introduction to powerful tools like `strace`, `ltrace`, `gdb`, `SystemTap`, and `perf` for inspecting and debugging syscalls.
+    - Practical examples demonstrating the usage of these tools.
 
 8. **Security Implications**:
-   - Exploration of potential security risks associated with syscalls.
-   - Strategies and best practices to mitigate vulnerabilities and enhance system security.
+    - Exploration of potential security risks associated with syscalls.
+    - Strategies and best practices to mitigate vulnerabilities and enhance system security.
 
 **Final Thoughts**:
 
@@ -1766,21 +1791,21 @@ Understanding system calls is pivotal for developers aiming to perform low-level
 
 To further enhance your understanding of system calls in Linux, consider exploring the following resources:
 
-- **Books**:
+-   **Books**:
 
-  - _"Linux System Programming"_ by Robert Love
-  - _"Understanding Linux Network Internals"_ by Christian Benvenuti
+    -   _"Linux System Programming"_ by Robert Love
+    -   _"Understanding Linux Network Internals"_ by Christian Benvenuti
 
-- **Online Documentation**:
+-   **Online Documentation**:
 
-  - [The Linux Programmer's Manual](https://man7.org/linux/man-pages/man2/syscall.2.html)
-  - [Syscall Table](https://syscalls.kernelgrok.com/)
+    -   [The Linux Programmer's Manual](https://man7.org/linux/man-pages/man2/syscall.2.html)
+    -   [Syscall Table](https://syscalls.kernelgrok.com/)
 
-- **Tutorials and Articles**:
+-   **Tutorials and Articles**:
 
-  - [Linux System Calls: An Introduction](https://www.geeksforgeeks.org/linux-system-calls/)
-  - [Advanced Linux System Call Programming](https://www.ibm.com/docs/en/linux-on-systems?topic=system-calls)
+    -   [Linux System Calls: An Introduction](https://www.geeksforgeeks.org/linux-system-calls/)
+    -   [Advanced Linux System Call Programming](https://www.ibm.com/docs/en/linux-on-systems?topic=system-calls)
 
-- **Tools Documentation**:
-  - [strace Documentation](https://strace.io/)
-  - [gdb Documentation](https://www.gnu.org/software/gdb/documentation/)
+-   **Tools Documentation**:
+    -   [strace Documentation](https://strace.io/)
+    -   [gdb Documentation](https://www.gnu.org/software/gdb/documentation/)
