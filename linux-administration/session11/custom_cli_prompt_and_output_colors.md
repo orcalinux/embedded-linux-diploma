@@ -84,27 +84,49 @@ _Note: You can also use background colors by adding 10 to the foreground color c
 Here's an example of how to set a colored prompt:
 
 ```bash
-export PS1="\[\e[32m\]\u@\h:\w\$ \[\e[0m\]"
+export PS1="\[\e[32m\]\u@\h\[\e[0m\]:\[\e[34m\]\w\[\e[0m\]\$ "
 ```
 
 **Explanation:**
 
--   `\[\e[32m\]`: Sets the color to green.
--   `\u`: Username.
--   `@`: Literal character `@`.
--   `\h`: Hostname.
--   `:`: Literal colon.
--   `\w`: Current working directory.
--   `\$`: Shows `#` if the effective UID is 0, otherwise `$`.
--   `\[\e[0m\]`: Resets the color to default.
+-   **`\[\e[32m\]`** – _Sets the text color to **green** for the section following it._
 
-**Result:** Your prompt will display the username, hostname, and current directory in green, followed by a `$` symbol in the default color.
+    -   `\e` – Escape character.
+    -   `[32m` – ANSI code for green.
+    -   `\[` and `\]` – Wraps non-printing characters to ensure correct cursor positioning during line wrapping.
+
+-   **`\u`** – _Displays the **current username** (e.g., `sarah`)._
+
+-   **`@`** – _Literal `@` character, separating the username and hostname (e.g., `sarah@`)._
+
+-   **`\h`** – _Displays the **hostname** up to the first `.` (e.g., `linux`)._
+
+-   **`\[\e[0m\]`** – _Resets text color to the **default terminal color** after the hostname._
+
+    -   `[0m` – ANSI code to reset all styles.
+
+-   **`:`** – _Literal colon `:` used as a separator (e.g., `sarah@linux:`)._
+
+-   **`\[\e[34m\]`** – _Sets the text color to **blue** for the working directory._
+
+    -   `[34m` – ANSI code for blue.
+
+-   **`\w`** – _Displays the **current working directory** relative to the home directory (e.g., `~/embedded-linux-diploma`)._
+
+    -   The `~` indicates the home directory.
+
+-   **`\[\e[0m\]`** –  _Resets the color to **default** after displaying the working directory._
+
+-   **`\$`** – _Displays the shell prompt symbol:_
+    -   `$` – For regular users.
+    -   `#` – If the effective user ID (`UID`) is `0` (root).
+-   **` ` (Space at the end)** –  _Adds a space after the prompt for readability._
 
 ### Persisting Changes
 
 To make the changes permanent, add the `export PS1=...` line to your `~/.bashrc` or `~/.bash_profile` file:
 
-1. Open the file in a text editor, e.g., `nano ~/.bashrc`.
+1. Open the file in a text editor, e.g., `vim ~/.bashrc`.
 2. Add the `export PS1=...` line at the end of the file.
 3. Save and exit the editor.
 4. Reload the configuration with `source ~/.bashrc` or restart the terminal.
