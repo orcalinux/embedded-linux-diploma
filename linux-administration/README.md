@@ -388,16 +388,16 @@ Module 1: **Linux Fundamentals** offers a comprehensive introduction to the Linu
 
 ## Additional Resources
 
--   [Official Linux Documentation](https://www.kernel.org/doc/)
--   [GNU Bash Reference Manual](https://www.gnu.org/software/bash/manual/bash.html)
--   [Vim Documentation](https://www.vim.org/docs.php)
--   [GRUB Bootloader Documentation](https://www.gnu.org/software/grub/documentation/)
--   [Yocto Project Documentation](https://www.yoctoproject.org/docs/)
--   [iptables Tutorial](https://iptables-tutorial.frozentux.net/iptables-tutorial.html)
+- [Official Linux Documentation](https://www.kernel.org/doc/)
+- [GNU Bash Reference Manual](https://www.gnu.org/software/bash/manual/bash.html)
+- [Vim Documentation](https://www.vim.org/docs.php)
+- [GRUB Bootloader Documentation](https://www.gnu.org/software/grub/documentation/)
+- [Yocto Project Documentation](https://www.yoctoproject.org/docs/)
+- [iptables Tutorial](https://iptables-tutorial.frozentux.net/iptables-tutorial.html)
 
 ## Contact and Support
 
-For any queries or support related to this module, please reach out to the course instructor or visit the [course forum](https://forum.embedded-linux-diploma.com).
+For any queries or support related to this module, please reach out to the course instructor or visit the course forum.
 
 ---
 
