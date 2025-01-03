@@ -37,7 +37,7 @@ Module 1: **Linux Fundamentals** offers a comprehensive introduction to the Linu
     - [Session 04: Intro to Process Management in Linux](#session-04-intro-to-process-management-in-linux)
     - [Session 04: Linux File Permissions and Special Bits](#session-04-linux-file-permissions-and-special-bits)
     - [Session 04: Linux File Permissions Demonstration](#session-04-linux-file-permissions-demonstration)
-    - [Session 04: Linux `su` Command Guide with Environment](#session-04-linux-su-command-guide-with-env)
+    - [Session 04: Linux `su` Command Guide with Environment](#session-04-linux-su-command-guide-with-environment)
     - [Session 04: Ubuntu Package Management Guide](#session-04-ubuntu-package-management-guide)
   - [5. C Programming and System Calls](#5-c-programming-and-system-calls)
     - [Session 05: C Build Process Step by Step](#session-05-c-build-process-step-by-step)
@@ -71,7 +71,7 @@ Module 1: **Linux Fundamentals** offers a comprehensive introduction to the Linu
     - [Session 08: Virtual Filesystems in Linux](#session-08-virtual-filesystems-in-linux)
   - [9. Bootloader and Process Management](#9-bootloader-and-process-management)
     - [Session 09: Guide to the GRUB Menu Configuration](#session-09-guide-to-the-grub-menu-configuration)
-    - [Session 09: Linux `bg` and `fg` Process Management](#session-09-linux-bg-fg-process-management)
+    - [Session 09: Linux `bg` and `fg` Process Management](#session-09-linux-bg-and-fg-process-management)
     - [Session 09: Linux Daemon Process Guide](#session-09-linux-daemon-process-guide)
     - [Session 09: Linux Process Priority and Niceness Guide](#session-09-linux-process-priority-and-niceness-guide)
     - [Session 09: Linux Signals Guide](#session-09-linux-signals-guide)
@@ -97,12 +97,12 @@ Module 1: **Linux Fundamentals** offers a comprehensive introduction to the Linu
 
 ### Session 01: Introduction to Linux and Linux History
 
-- **Introduction to Linux**: Overview of the Linux operating system, its origins, and evolution.
-- **Linux History**: Detailed exploration of the development milestones and key contributors to Linux.
+-   **Introduction to Linux**: Overview of the Linux operating system, its origins, and evolution.
+-   **Linux History**: Detailed exploration of the development milestones and key contributors to Linux.
 
 ### Session 01: The Linux Programming Interface
 
-- **Linux Programming Interface**: Comprehensive guide to system calls, libraries, and application programming on Linux.
+-   **Linux Programming Interface**: Comprehensive guide to system calls, libraries, and application programming on Linux.
 
 ---
 
@@ -110,23 +110,23 @@ Module 1: **Linux Fundamentals** offers a comprehensive introduction to the Linu
 
 ### Session 02: Linux Basic Commands
 
-- **Essential Commands**: Introduction to fundamental Linux commands for file manipulation, navigation, and system monitoring.
+-   **Essential Commands**: Introduction to fundamental Linux commands for file manipulation, navigation, and system monitoring.
 
 ### Session 02: Linux Magic Numbers System Programming Guide
 
-- **Magic Numbers**: Understanding magic numbers in Linux for system programming and file identification.
+-   **Magic Numbers**: Understanding magic numbers in Linux for system programming and file identification.
 
 ### Session 02: Types of Shells in Linux
 
-- **Shell Variants**: Overview of different shell environments available in Linux, their features, and use cases.
+-   **Shell Variants**: Overview of different shell environments available in Linux, their features, and use cases.
 
 ### Session 02: Ubuntu Boot Process Guide
 
-- **Boot Process**: Step-by-step explanation of the Ubuntu boot sequence, including BIOS, bootloader, and initialization.
+-   **Boot Process**: Step-by-step explanation of the Ubuntu boot sequence, including BIOS, bootloader, and initialization.
 
 ### Session 02: Vim Mastery
 
-- **Vim Editor**: Advanced techniques and tips for efficient text editing using Vim.
+-   **Vim Editor**: Advanced techniques and tips for efficient text editing using Vim.
 
 ---
 
@@ -134,27 +134,27 @@ Module 1: **Linux Fundamentals** offers a comprehensive introduction to the Linu
 
 ### Session 03: Getopt and Getopt Long Guide
 
-- **Argument Parsing**: Utilizing `getopt` and `getopt_long` for handling command-line arguments in scripts and applications.
+-   **Argument Parsing**: Utilizing `getopt` and `getopt_long` for handling command-line arguments in scripts and applications.
 
 ### Session 03: Journaling in Linux Filesystems
 
-- **Journaling Filesystems**: Understanding the role and implementation of journaling in Linux filesystems for data integrity.
+-   **Journaling Filesystems**: Understanding the role and implementation of journaling in Linux filesystems for data integrity.
 
 ### Session 03: Linux Users and Groups Guide
 
-- **User Management**: Managing users and groups, permissions, and access control in Linux.
+-   **User Management**: Managing users and groups, permissions, and access control in Linux.
 
 ### Session 03: Wildcard CLI Tasks
 
-- **Wildcard Operations**: Practical exercises using wildcards in the command line for efficient file handling.
+-   **Wildcard Operations**: Practical exercises using wildcards in the command line for efficient file handling.
 
 ### Session 03: Wildcard CLI Tasks Solution
 
-- **Solutions**: Detailed solutions to wildcard CLI tasks for self-assessment and learning reinforcement.
+-   **Solutions**: Detailed solutions to wildcard CLI tasks for self-assessment and learning reinforcement.
 
 ### Session 03: Wildcards CLI Guide
 
-- **Comprehensive Wildcard Guide**: In-depth exploration of wildcard usage in various shell environments.
+-   **Comprehensive Wildcard Guide**: In-depth exploration of wildcard usage in various shell environments.
 
 ---
 
@@ -162,31 +162,31 @@ Module 1: **Linux Fundamentals** offers a comprehensive introduction to the Linu
 
 ### Session 04: Introduction to Bash Scripting
 
-- **Bash Basics**: Fundamentals of writing and executing Bash scripts for automation and task management.
+-   **Bash Basics**: Fundamentals of writing and executing Bash scripts for automation and task management.
 
 ### Session 04: Bash Scripting Task Guide
 
-- **Practical Tasks**: Step-by-step tasks to practice and enhance Bash scripting skills.
+-   **Practical Tasks**: Step-by-step tasks to practice and enhance Bash scripting skills.
 
 ### Session 04: Intro to Process Management in Linux
 
-- **Process Control**: Managing and controlling processes, understanding process states and lifecycle.
+-   **Process Control**: Managing and controlling processes, understanding process states and lifecycle.
 
 ### Session 04: Linux File Permissions and Special Bits
 
-- **File Permissions**: Detailed explanation of Linux file permission models and special permission bits.
+-   **File Permissions**: Detailed explanation of Linux file permission models and special permission bits.
 
 ### Session 04: Linux File Permissions Demonstration
 
-- **Hands-On Demo**: Practical demonstration of setting and modifying file permissions in Linux.
+-   **Hands-On Demo**: Practical demonstration of setting and modifying file permissions in Linux.
 
 ### Session 04: Linux `su` Command Guide with Environment
 
-- **`su` Command**: Comprehensive guide to using the `su` command for user switching and environment management.
+-   **`su` Command**: Comprehensive guide to using the `su` command for user switching and environment management.
 
 ### Session 04: Ubuntu Package Management Guide
 
-- **Package Management**: Managing software packages in Ubuntu using `apt`, including installation, updates, and removals.
+-   **Package Management**: Managing software packages in Ubuntu using `apt`, including installation, updates, and removals.
 
 ---
 
@@ -194,23 +194,23 @@ Module 1: **Linux Fundamentals** offers a comprehensive introduction to the Linu
 
 ### Session 05: C Build Process Step by Step
 
-- **Build Process**: Detailed walkthrough of compiling and building C programs in a Linux environment.
+-   **Build Process**: Detailed walkthrough of compiling and building C programs in a Linux environment.
 
 ### Session 05: ELF File Analysis Readme
 
-- **ELF Files**: Understanding the Executable and Linkable Format (ELF) for binaries in Linux.
+-   **ELF Files**: Understanding the Executable and Linkable Format (ELF) for binaries in Linux.
 
 ### Session 05: Linux Architecture Layered Design
 
-- **System Architecture**: Exploration of Linux's layered architecture and its components.
+-   **System Architecture**: Exploration of Linux's layered architecture and its components.
 
 ### Session 05: Static and Shared Libraries in C
 
-- **Libraries in C**: Differences between static and shared libraries, and their usage in C programming.
+-   **Libraries in C**: Differences between static and shared libraries, and their usage in C programming.
 
 ### Session 05: Syscalls in Linux
 
-- **System Calls**: Comprehensive guide to using system calls for interacting with the Linux kernel.
+-   **System Calls**: Comprehensive guide to using system calls for interacting with the Linux kernel.
 
 ---
 
@@ -218,27 +218,27 @@ Module 1: **Linux Fundamentals** offers a comprehensive introduction to the Linu
 
 ### Session 06: Bash Exercises with Solutions
 
-- **Practice Exercises**: A set of advanced Bash scripting exercises with provided solutions for self-learning.
+-   **Practice Exercises**: A set of advanced Bash scripting exercises with provided solutions for self-learning.
 
 ### Session 06: Bash Scripting Guide
 
-- **Advanced Scripting**: Techniques and best practices for writing robust and efficient Bash scripts.
+-   **Advanced Scripting**: Techniques and best practices for writing robust and efficient Bash scripts.
 
 ### Session 06: Cut Command Guide
 
-- **Text Processing**: Utilizing the `cut` command for extracting sections from each line of input.
+-   **Text Processing**: Utilizing the `cut` command for extracting sections from each line of input.
 
 ### Session 06: Linux Networking Guide
 
-- **Networking Basics**: Fundamental networking concepts and commands in Linux.
+-   **Networking Basics**: Fundamental networking concepts and commands in Linux.
 
 ### Session 06: Sed Command Guide
 
-- **Stream Editing**: Mastering the `sed` command for advanced text manipulation and processing.
+-   **Stream Editing**: Mastering the `sed` command for advanced text manipulation and processing.
 
 ### Session 06: Tar Command Guide
 
-- **Archiving Files**: Using the `tar` command for creating and extracting archive files.
+-   **Archiving Files**: Using the `tar` command for creating and extracting archive files.
 
 ---
 
@@ -246,31 +246,31 @@ Module 1: **Linux Fundamentals** offers a comprehensive introduction to the Linu
 
 ### Session 07: Linux Filesystem Storage Guide
 
-- **Storage Management**: Understanding storage devices, partitions, and filesystem types in Linux.
+-   **Storage Management**: Understanding storage devices, partitions, and filesystem types in Linux.
 
 ### Session 07: Master Boot Record Comprehensive Guide
 
-- **MBR Details**: In-depth guide to the Master Boot Record, its structure, and management.
+-   **MBR Details**: In-depth guide to the Master Boot Record, its structure, and management.
 
 ### Session 07: MBR Partitioning and EBR Guide
 
-- **Partitioning Schemes**: Exploring MBR and Extended Boot Record partitioning for disk management.
+-   **Partitioning Schemes**: Exploring MBR and Extended Boot Record partitioning for disk management.
 
 ### Session 07: Secure Boot Demo Guide
 
-- **Secure Boot**: Demonstration of implementing Secure Boot in a Linux environment.
+-   **Secure Boot**: Demonstration of implementing Secure Boot in a Linux environment.
 
 ### Session 07: Secure Boot Linux Guide
 
-- **Secure Boot Configuration**: Step-by-step guide to configuring Secure Boot on Linux systems.
+-   **Secure Boot Configuration**: Step-by-step guide to configuring Secure Boot on Linux systems.
 
 ### Session 07: Simple Linux Distro
 
-- **Custom Distro Creation**: Basics of creating and customizing a simple Linux distribution.
+-   **Custom Distro Creation**: Basics of creating and customizing a simple Linux distribution.
 
 ### Session 07: Special Bits Linux Permissions Demo
 
-- **Advanced Permissions**: Practical demonstration of using special bits in Linux file permissions.
+-   **Advanced Permissions**: Practical demonstration of using special bits in Linux file permissions.
 
 ---
 
@@ -278,35 +278,35 @@ Module 1: **Linux Fundamentals** offers a comprehensive introduction to the Linu
 
 ### Session 08: Copy on Write in Linux
 
-- **CoW Mechanism**: Understanding the Copy-on-Write technique and its applications in Linux.
+-   **CoW Mechanism**: Understanding the Copy-on-Write technique and its applications in Linux.
 
 ### Session 08: Guide to `dmesg` in Linux
 
-- **Kernel Messages**: Utilizing the `dmesg` command to view and interpret kernel messages.
+-   **Kernel Messages**: Utilizing the `dmesg` command to view and interpret kernel messages.
 
 ### Session 08: Linux File Operations and Filesystem Guide
 
-- **File Operations**: Comprehensive guide to performing file operations and managing filesystems in Linux.
+-   **File Operations**: Comprehensive guide to performing file operations and managing filesystems in Linux.
 
 ### Session 08: Linux Filesystem Operations Advanced
 
-- **Advanced Filesystem Tasks**: Exploring advanced filesystem operations and maintenance techniques.
+-   **Advanced Filesystem Tasks**: Exploring advanced filesystem operations and maintenance techniques.
 
 ### Session 08: Linux Links Guide
 
-- **File Linking**: Understanding and creating hard and symbolic links in Linux.
+-   **File Linking**: Understanding and creating hard and symbolic links in Linux.
 
 ### Session 08: Linux Mounting Guide
 
-- **Mounting Filesystems**: Detailed instructions on mounting and unmounting filesystems in Linux.
+-   **Mounting Filesystems**: Detailed instructions on mounting and unmounting filesystems in Linux.
 
 ### Session 08: USB Partition Format Demo
 
-- **USB Management**: Demonstration of partitioning and formatting USB drives in Linux.
+-   **USB Management**: Demonstration of partitioning and formatting USB drives in Linux.
 
 ### Session 08: Virtual Filesystems in Linux
 
-- **Virtual FS**: Exploring virtual filesystems and their roles within the Linux operating system.
+-   **Virtual FS**: Exploring virtual filesystems and their roles within the Linux operating system.
 
 ---
 
@@ -314,31 +314,31 @@ Module 1: **Linux Fundamentals** offers a comprehensive introduction to the Linu
 
 ### Session 09: Guide to the GRUB Menu Configuration
 
-- **GRUB Configuration**: Detailed guide to configuring the GRUB bootloader for system customization.
+-   **GRUB Configuration**: Detailed guide to configuring the GRUB bootloader for system customization.
 
 ### Session 09: Linux `bg` and `fg` Process Management
 
-- **Background and Foreground Processes**: Managing process states using `bg` and `fg` commands.
+-   **Background and Foreground Processes**: Managing process states using `bg` and `fg` commands.
 
 ### Session 09: Linux Daemon Process Guide
 
-- **Daemon Processes**: Understanding and managing daemon processes in Linux.
+-   **Daemon Processes**: Understanding and managing daemon processes in Linux.
 
 ### Session 09: Linux Process Priority and Niceness Guide
 
-- **Process Prioritization**: Managing process priorities and niceness levels for optimal system performance.
+-   **Process Prioritization**: Managing process priorities and niceness levels for optimal system performance.
 
 ### Session 09: Linux Signals Guide
 
-- **Signal Handling**: Comprehensive guide to sending, receiving, and handling signals in Linux.
+-   **Signal Handling**: Comprehensive guide to sending, receiving, and handling signals in Linux.
 
 ### Session 09: PGID Management Guide
 
-- **Process Group ID**: Understanding and managing Process Group IDs (PGIDs) in Linux.
+-   **Process Group ID**: Understanding and managing Process Group IDs (PGIDs) in Linux.
 
 ### Session 09: Simple Linux Distro
 
-- **Custom Distro Creation**: Further exploration into creating and customizing a simple Linux distribution.
+-   **Custom Distro Creation**: Further exploration into creating and customizing a simple Linux distribution.
 
 ---
 
@@ -346,27 +346,27 @@ Module 1: **Linux Fundamentals** offers a comprehensive introduction to the Linu
 
 ### Session 10: `iptables` Firewall Cheatsheet
 
-- **Firewall Management**: Quick reference guide for managing firewalls using `iptables` in Linux.
+-   **Firewall Management**: Quick reference guide for managing firewalls using `iptables` in Linux.
 
 ### Session 10: Linux Virtual and Tunnel Interfaces Guide
 
-- **Virtual Interfaces**: Understanding and configuring virtual and tunnel interfaces in Linux networking.
+-   **Virtual Interfaces**: Understanding and configuring virtual and tunnel interfaces in Linux networking.
 
 ### Session 10: Networking and Virtualization in Linux
 
-- **Network Virtualization**: Exploring networking concepts and virtualization technologies within Linux.
+-   **Network Virtualization**: Exploring networking concepts and virtualization technologies within Linux.
 
 ### Session 10: Networking Virtualization Guide
 
-- **Advanced Networking**: Detailed guide to advanced networking and virtualization setups in Linux.
+-   **Advanced Networking**: Detailed guide to advanced networking and virtualization setups in Linux.
 
 ### Session 10: SSH Comprehensive Guide
 
-- **Secure Shell (SSH)**: Comprehensive guide to using SSH for secure remote access and management.
+-   **Secure Shell (SSH)**: Comprehensive guide to using SSH for secure remote access and management.
 
 ### Session 10: Yocto Package Installation
 
-- **Yocto Project**: Instructions for installing and managing packages using the Yocto Project in Linux.
+-   **Yocto Project**: Instructions for installing and managing packages using the Yocto Project in Linux.
 
 ---
 
@@ -374,26 +374,26 @@ Module 1: **Linux Fundamentals** offers a comprehensive introduction to the Linu
 
 ### Session 11: Advanced Bash Scripting Guide
 
-- **Advanced Techniques**: Exploring advanced Bash scripting techniques for complex automation tasks.
+-   **Advanced Techniques**: Exploring advanced Bash scripting techniques for complex automation tasks.
 
 ### Session 11: Bash Parameter Expansion Guide
 
-- **Parameter Expansion**: Mastering parameter expansion for dynamic variable handling in Bash scripts.
+-   **Parameter Expansion**: Mastering parameter expansion for dynamic variable handling in Bash scripts.
 
 ### Session 11: Custom CLI Prompt and Output Colors
 
-- **Customization**: Customizing the command-line interface with personalized prompts and color schemes.
+-   **Customization**: Customizing the command-line interface with personalized prompts and color schemes.
 
 ---
 
 ## Additional Resources
 
-- [Official Linux Documentation](https://www.kernel.org/doc/)
-- [GNU Bash Reference Manual](https://www.gnu.org/software/bash/manual/bash.html)
-- [Vim Documentation](https://www.vim.org/docs.php)
-- [GRUB Bootloader Documentation](https://www.gnu.org/software/grub/documentation/)
-- [Yocto Project Documentation](https://www.yoctoproject.org/docs/)
-- [iptables Tutorial](https://iptables-tutorial.frozentux.net/iptables-tutorial.html)
+-   [Official Linux Documentation](https://www.kernel.org/doc/)
+-   [GNU Bash Reference Manual](https://www.gnu.org/software/bash/manual/bash.html)
+-   [Vim Documentation](https://www.vim.org/docs.php)
+-   [GRUB Bootloader Documentation](https://www.gnu.org/software/grub/documentation/)
+-   [Yocto Project Documentation](https://www.yoctoproject.org/docs/)
+-   [iptables Tutorial](https://iptables-tutorial.frozentux.net/iptables-tutorial.html)
 
 ## Contact and Support
 
