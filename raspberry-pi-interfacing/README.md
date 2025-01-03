@@ -163,7 +163,6 @@ Module 2: **Raspberry Pi Interfacing** provides an in-depth exploration of integ
 - **Step 5: Web Server Development**: Build a robust web server for project interaction.
 - **Step 6: Photo Display on Webpage**: Display the latest captured photo on the web interface.
 - **Step 7: Auto-Launch Programs on Boot**: Configure your Raspberry Pi to launch necessary programs upon startup.
-- **Conclusion**: Guidance on further expanding Raspberry Pi projects beyond the curriculum.
 
 ---
 
