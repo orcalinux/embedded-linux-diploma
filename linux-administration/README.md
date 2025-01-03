@@ -393,7 +393,7 @@ Module 1: **Linux Fundamentals** offers a comprehensive introduction to the Linu
 - [Vim Documentation](https://www.vim.org/docs.php)
 - [GRUB Bootloader Documentation](https://www.gnu.org/software/grub/documentation/)
 - [Yocto Project Documentation](https://www.yoctoproject.org/docs/)
-- [iptables Tutorial](https://iptables-tutorial.frozentux.net/iptables-tutorial.html)
+- [iptables Tutorial](https://www.frozentux.net/iptables-tutorial/iptables-tutorial.html)
 
 ## Contact and Support
 
