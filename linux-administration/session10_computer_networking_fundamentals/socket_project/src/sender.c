@@ -17,7 +17,7 @@ int main()
     server_addr.sin_port = htons(PORT);
     if (inet_pton(AF_INET, "127.0.0.1", &server_addr.sin_addr) <= 0)
     {
-        error("Invalid address/ Address not supported");
+        error("Invalid address / Address not supported");
     }
 
     // Connect to server
