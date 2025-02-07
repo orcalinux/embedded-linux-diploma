@@ -24,6 +24,7 @@ This guide provides a comprehensive workflow for setting up **Yocto**, building 
   - [7. **Saving the Kernel and Root Filesystem**](#7-saving-the-kernel-and-root-filesystem)
   - [8. **Networking Two Yocto VMs**](#8-networking-two-yocto-vms)
     - [**`start_vms.sh`**](#start_vmssh)
+      - [**Note: Explanation of the `--append` Line**](#note-explanation-of-the---append-line)
   - [9. **Machine Configurations for Static IPs**](#9-machine-configurations-for-static-ips)
     - [**Machine 1: `node-alpha`**](#machine-1-node-alpha)
     - [**Machine 2: `node-beta`**](#machine-2-node-beta)
@@ -251,6 +252,28 @@ echo "[+] Machines launched successfully."
 echo "    $VM1_NAME (IP: $VM1_IP) and $VM2_NAME (IP: $VM2_IP)."
 echo "    Bridge: $BRIDGE_NAME, TAPs: $TAP1, $TAP2."
 ```
+
+#### **Note: Explanation of the `--append` Line**
+
+When you see:
+
+```bash
+--append "root=/dev/vda rw ip=$VM2_IP::192.168.10.1:255.255.255.0::eth0:off"
+```
+
+You’re passing **kernel command-line arguments**:
+
+1. **`root=/dev/vda rw`**
+
+    - Tells the kernel to mount `/dev/vda` (a VirtIO disk) as the root filesystem in read-write mode.
+
+2. **`ip=$VM2_IP::192.168.10.1:255.255.255.0::eth0:off`**
+    - **Assigns a static IP** address (`$VM2_IP`) to `eth0`.
+    - **Gateway** is `192.168.10.1`.
+    - **Netmask** is `255.255.255.0`.
+    - `off` disables DHCP auto-configuration, forcing static networking.
+
+This **temporary** IP assignment can be overridden later by the OS’s internal network configuration (e.g., `/etc/network/interfaces`).
 
 ---
 
