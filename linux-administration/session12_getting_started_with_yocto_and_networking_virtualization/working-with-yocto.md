@@ -321,3 +321,4 @@ up route add default gw 10.20.10.1 dev eth0
 -   [**Yocto Project Releases**](https://wiki.yoctoproject.org/wiki/Releases)
 -   [**Yocto Project Overview Video**](https://youtu.be/8M8U1EgnUVw?si=1cH194i2Bgcd8TZJ)
 -   [**OpenEmbedded**](https://www.openembedded.org/)
+-   [**RedHat Virtio-networking series**](https://www.redhat.com/en/virtio-networking-series)
