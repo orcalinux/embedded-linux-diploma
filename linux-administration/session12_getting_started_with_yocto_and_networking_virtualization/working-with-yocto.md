@@ -25,11 +25,13 @@ This guide provides a comprehensive workflow for setting up **Yocto**, building 
   - [8. **Networking Two Yocto VMs**](#8-networking-two-yocto-vms)
     - [**`start_vms.sh`**](#start_vmssh)
       - [**Note: Explanation of the `--append` Line**](#note-explanation-of-the---append-line)
-  - [9. **Machine Configurations for Static IPs**](#9-machine-configurations-for-static-ips)
+  - [9. **Cleanup Script for Two Machines**](#9-cleanup-script-for-two-machines)
+    - [**`cleanup_vms.sh`**](#cleanup_vmssh)
+  - [10. **Machine Configurations for Static IPs**](#10-machine-configurations-for-static-ips)
     - [**Machine 1: `node-alpha`**](#machine-1-node-alpha)
     - [**Machine 2: `node-beta`**](#machine-2-node-beta)
-  - [10. **Troubleshooting and Tips**](#10-troubleshooting-and-tips)
-  - [11. **Resources**](#11-resources)
+  - [11. **Troubleshooting and Tips**](#11-troubleshooting-and-tips)
+  - [12. **Resources**](#12-resources)
 
 ---
 
@@ -78,7 +80,7 @@ For official guidance, see the [Yocto Project Quick Start Guide](https://docs.yo
     bitbake core-image-minimal
     ```
 3. **Check Artifacts**  
-   Built images appear in `tmp/deploy/images/<machine>/`. For example, you might see:
+   Built images appear in `tmp/deploy/images/<machine>/`. For example:
     - `bzImage-<machine>.bin`
     - `core-image-minimal-<machine>.rootfs.ext4`
 
@@ -88,11 +90,11 @@ For official guidance, see the [Yocto Project Quick Start Guide](https://docs.yo
 
 ### 4.1 **Add Additional Layers**
 
-1. **Clone Additional Repos**
+1. **Clone Additional Repos** (example):
     ```bash
     git clone https://github.com/akuster/meta-odroid
     ```
-2. **Update `bblayers.conf`**
+2. **Update `bblayers.conf`**:
     ```bash
     BBLAYERS ?= " \
       /home/$USER/yocto/<release-name>/poky/meta \
@@ -119,7 +121,7 @@ For official guidance, see the [Yocto Project Quick Start Guide](https://docs.yo
 2. **Cleanup**
 
     - `bitbake -c clean <recipe>` removes build artifacts for one recipe.
-    - `rm_work` class can remove work dirs to save space.
+    - Using the `rm_work` class can remove intermediate work dirs to save space.
 
 3. **Sstate Caching**
     - `SSTATE_DIR` can be set for reusing artifacts in CI or repeated builds.
@@ -136,32 +138,28 @@ For official guidance, see the [Yocto Project Quick Start Guide](https://docs.yo
     ```bash
     runqemu core-image-minimal-qemux86-64 nographic
     ```
--   **KVM Acceleration**:
-
+-   **KVM Acceleration** (requires host CPU virtualization):
     ```bash
     runqemu qemux86-64 kvm nographic
     ```
-
-    (Requires host CPU virtualization.)
-
 -   **QEMU Monitor**: Press `Ctrl + Alt + 2`; commands include `stop`, `cont`, `quit`.
 
 ---
 
 ## 7. **Saving the Kernel and Root Filesystem**
 
-1. **Create a Backup Directory**
+1. **Create a Backup Directory**:
     ```bash
     mkdir -p ~/yocto/<release-name>/saved-images
     ```
-2. **Copy the Files**
+2. **Copy the Files**:
     ```bash
     cp -L tmp/deploy/images/qemux86-64/core-image-minimal-qemux86-64.rootfs.ext4 \
        ~/yocto/<release-name>/saved-images
     cp -L tmp/deploy/images/qemux86-64/bzImage-qemux86-64.bin \
        ~/yocto/<release-name>/saved-images
     ```
-3. **Run the Saved Image**
+3. **Run the Saved Image**:
     ```bash
     runqemu \
       ~/yocto/<release-name>/saved-images/core-image-minimal-qemux86-64.rootfs.ext4 \
@@ -173,7 +171,7 @@ For official guidance, see the [Yocto Project Quick Start Guide](https://docs.yo
 
 ## 8. **Networking Two Yocto VMs**
 
-The following script creates a Linux **bridge** (`br1`) and two TAP interfaces. Then it launches two separate QEMU VMs, each with a **static IP** on the same subnet.
+The following script creates a Linux **bridge** (`br1`) and two TAP interfaces. It then launches two separate QEMU VMs, each with a **static IP** on the same subnet.
 
 ### **`start_vms.sh`**
 
@@ -263,21 +261,47 @@ When you see:
 
 You’re passing **kernel command-line arguments**:
 
-1. **`root=/dev/vda rw`**
-
-    - Tells the kernel to mount `/dev/vda` (a VirtIO disk) as the root filesystem in read-write mode.
+1. **`root=/dev/vda rw`**  
+   Tells the kernel to mount `/dev/vda` (a VirtIO disk) as the root filesystem in read-write mode.
 
 2. **`ip=$VM2_IP::192.168.10.1:255.255.255.0::eth0:off`**
-    - **Assigns a static IP** address (`$VM2_IP`) to `eth0`.
-    - **Gateway** is `192.168.10.1`.
-    - **Netmask** is `255.255.255.0`.
+    - Assigns a **static IP** address (`$VM2_IP`) to `eth0`.
+    - Gateway is `192.168.10.1`.
+    - Netmask is `255.255.255.0`.
     - `off` disables DHCP auto-configuration, forcing static networking.
 
-This **temporary** IP assignment can be overridden later by the OS’s internal network configuration (e.g., `/etc/network/interfaces`).
+This temporary IP assignment can be overridden by the OS’s internal network configuration (e.g., `/etc/network/interfaces`).
+
+## 9. **Cleanup Script for Two Machines**
+
+After you’ve finished with the two virtual machines, use the following script to remove the **bridge** and **TAP devices**. This ensures your host networking returns to its pre-bridge state.
+
+### **`cleanup_vms.sh`**
+
+```bash
+#!/bin/bash
+
+# Detach the tap device vport11 from its bridge
+sudo ip link set dev vport11 nomaster
+# Delete the tap device vport11
+sudo ip tuntap del mode tap vport11
+
+# Detach the tap device vport12 from its bridge
+sudo ip link set dev vport12 nomaster
+# Delete the tap device vport12
+sudo ip tuntap del mode tap vport12
+
+# Delete the bridge device br1
+sudo ip link delete dev br1
+
+echo "[+] Cleanup complete. The bridge and TAP devices have been removed."
+```
+
+> **Note**: Before running this script, make sure both VMs (`node-alpha` and `node-beta`) are shut down or stopped.
 
 ---
 
-## 9. **Machine Configurations for Static IPs**
+## 10. **Machine Configurations for Static IPs**
 
 Edit `/etc/network/interfaces` (or your distro’s equivalent) **inside each VM** to set up a **static IP**. Here’s an example of two machines on the `10.20.10.x` subnet, each using `10.20.10.1` as the default gateway.
 
@@ -311,11 +335,11 @@ iface eth0 inet static
 up route add default gw 10.20.10.1 dev eth0
 ```
 
-> **Note**: In these examples, both machines share the same subnet (`10.20.10.x`) **and** the same default gateway (`10.20.10.1`). Ensure the addresses you choose do not overlap with your host’s local network or any other DHCP range. Adjust if you have a different topology in mind.
+> **Note**: In these examples, both machines share the same subnet (`10.20.10.x`) **and** the same default gateway (`10.20.10.1`). Ensure the addresses you choose do not overlap with your host’s local network or any other DHCP range. Adjust accordingly if you have a different topology in mind.
 
 ---
 
-## 10. **Troubleshooting and Tips**
+## 11. **Troubleshooting and Tips**
 
 1. **QEMU Permission Errors**
 
@@ -338,7 +362,7 @@ up route add default gw 10.20.10.1 dev eth0
 
 ---
 
-## 11. **Resources**
+## 12. **Resources**
 
 -   [**Yocto Project Documentation**](https://docs.yoctoproject.org/index.html)
 -   [**Yocto Project Releases**](https://wiki.yoctoproject.org/wiki/Releases)
