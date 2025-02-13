@@ -261,6 +261,7 @@ RealVNC® Viewer enables remote desktop access to your Raspberry Pi, allowing yo
 
 ## 7. References
 
+- **Getting Started with Raspberry Pi:** [https://www.raspberrypi.com/documentation/computers/getting-started.html#power-supply](https://www.raspberrypi.com/documentation/computers/getting-started.html#power-supply)
 - **Raspberry Pi OS:** [https://www.raspberrypi.com/software/](https://www.raspberrypi.com/software/)
 - **Angry IP Scanner Download:** [https://angryip.org/download/#linux](https://angryip.org/download/#linux)
 - **Eclipse SWT Project:** [https://www.eclipse.org/swt/](https://www.eclipse.org/swt/)
