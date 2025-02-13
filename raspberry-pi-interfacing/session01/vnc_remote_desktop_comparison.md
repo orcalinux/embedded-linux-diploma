@@ -88,7 +88,7 @@ This README provides an overview of VNC (Virtual Network Computing) for remote d
 4. **Connect using TigerVNC Viewer:**
    - Launch the viewer by running:
      ```bash
-     tigervncviewer
+     tigervnc
      ```
    - Enter the remote machine’s IP address and port (default is `:1` for the first session).
 

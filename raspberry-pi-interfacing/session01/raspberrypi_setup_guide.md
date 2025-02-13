@@ -16,11 +16,12 @@ This guide provides step-by-step instructions for installing Raspberry Pi OS usi
     - [For Ubuntu/Debian/Mint:](#for-ubuntudebianmint)
     - [For Fedora/RedHat/CentOS:](#for-fedoraredhatcentos)
     - [For Arch Linux:](#for-arch-linux)
-  - [4. Finding the Raspberry Pi IP Address](#4-finding-the-raspberry-pi-ip-address)
-  - [5. Angry IP Scanner Setup](#5-angry-ip-scanner-setup)
+  - [6. Angry IP Scanner Setup](#6-angry-ip-scanner-setup)
     - [Download Options \& Installation Commands](#download-options--installation-commands)
     - [Running Angry IP Scanner](#running-angry-ip-scanner)
     - [Additional Note for Raspbian/32-bit ARM](#additional-note-for-raspbian32-bit-arm)
+  - [4. Finding the Raspberry Pi IP Address](#4-finding-the-raspberry-pi-ip-address)
+  - [5. Configuring Raspberry Pi for Remote Desktop Access](#5-configuring-raspberry-pi-for-remote-desktop-access)
   - [6. RealVNC® Viewer Setup](#6-realvnc-viewer-setup)
     - [Download \& Installation Commands for RealVNC® Viewer](#download--installation-commands-for-realvnc-viewer)
   - [7. References](#7-references)
@@ -43,16 +44,19 @@ Download the latest Raspberry Pi OS from the official website:
    Obtain the file `imager_1.8.5_amd64.deb` from the official source.
 
 2. **Open Terminal and Navigate to Downloads:**
+
    ```bash
    cd $HOME/Downloads/
    ```
 
 3. **Install the .deb Package:**
+
    ```bash
    sudo dpkg -i imager_1.8.5_amd64.deb
    ```
 
 4. **Fix Dependency Issues (if any):**
+
    ```bash
    sudo apt-get install -f
    ```
@@ -65,6 +69,7 @@ Download the latest Raspberry Pi OS from the official website:
 ### Alternative Installation on Raspberry Pi OS
 
 1. **Install Directly from the Repository:**
+
    ```bash
    sudo apt install rpi-imager
    ```
@@ -126,13 +131,7 @@ Angry IP Scanner requires **Java 11** or a compatible OpenJDK version. Follow th
 
 ---
 
-## 4. Finding the Raspberry Pi IP Address
-
-To locate your Raspberry Pi's IP address, use Angry IP Scanner. This tool scans your network and identifies connected devices, including your Raspberry Pi.
-
----
-
-## 5. Angry IP Scanner Setup
+## 6. Angry IP Scanner Setup
 
 ### Download Options & Installation Commands
 
@@ -141,15 +140,18 @@ To locate your Raspberry Pi's IP address, use Angry IP Scanner. This tool scans 
    Choose the appropriate package for your system. For example, if you are using Ubuntu/Debian/Mint, download the **x86 64-bit DEB Package** (e.g., `ipscan_3.9.1_amd64.deb`).
 
 2. **Open Terminal and Navigate to the Downloads Directory:**
+
    ```bash
    cd $HOME/Downloads/
    ```
 
 3. **Install the Downloaded Package:**  
    For Ubuntu/Debian/Mint, run:
+
    ```bash
    sudo dpkg -i ipscan_3.9.1_amd64.deb
    ```
+
 4. **Fix Dependency Issues (if necessary):**
    ```bash
    sudo apt-get install -f
@@ -159,6 +161,7 @@ To locate your Raspberry Pi's IP address, use Angry IP Scanner. This tool scans 
 
 - **Using the Installed Package:**  
   After installation, Angry IP Scanner creates a desktop entry under **Applications** (within **Internet** or **Networking**). You can also launch it from the terminal:
+
   ```bash
   ipscan
   ```
@@ -175,6 +178,50 @@ For Raspbian/32-bit ARM systems, when using the "any architecture" DEB package, 
 
 ---
 
+## 4. Finding the Raspberry Pi IP Address
+
+To locate your Raspberry Pi's IP address, use Angry IP Scanner. This tool scans your network and identifies connected devices, including your Raspberry Pi.
+
+---
+
+## 5. Configuring Raspberry Pi for Remote Desktop Access
+
+Once you have located your Raspberry Pi’s IP address using Angry IP Scanner, follow these steps to configure your device for remote desktop access:
+
+1. **Connect via SSH:**  
+   Open a terminal on your computer and connect to your Raspberry Pi by replacing `<raspberry_pi_ip>` with its actual IP address. For example:
+
+   ```bash
+   ssh pi@<raspberry_pi_ip>
+   ```
+
+   > **Note:** If your username is different (e.g., `mahmoud`), adjust the command accordingly.
+
+2. **Launch the Raspberry Pi Configuration Tool:**  
+   Once connected via SSH, run:
+
+   ```bash
+   sudo raspi-config
+   ```
+
+3. **Set Boot Options for Desktop Autologin:**  
+   In the `raspi-config` menu:
+
+   - Navigate to **System Options**.
+   - Select **Boot / Auto Login**.
+   - Choose **Desktop Autologin** (which automatically logs you into the Desktop GUI as the default user).
+
+4. **Enable VNC for Remote Desktop Access:**  
+   In the same `raspi-config` menu:
+   - Go to **Interface Options** (or **Interfacing Options**).
+   - Select **VNC**.
+   - Choose **Enable**.
+   - Exit `raspi-config` and reboot if prompted.
+
+After completing these steps, your Raspberry Pi will boot directly into the Desktop GUI with automatic login, and VNC will be enabled, allowing you to connect using RealVNC® Viewer.
+
+---
+
 ## 6. RealVNC® Viewer Setup
 
 RealVNC® Viewer enables remote desktop access to your Raspberry Pi, allowing you to control it from another computer.
@@ -186,6 +233,7 @@ RealVNC® Viewer enables remote desktop access to your Raspberry Pi, allowing yo
    Select the appropriate package for your Linux distribution (for example, the **.deb** package for Ubuntu/Debian).
 
 2. **Open Terminal and Navigate to the Downloads Directory:**
+
    ```bash
    cd $HOME/Downloads/
    ```
@@ -195,8 +243,8 @@ RealVNC® Viewer enables remote desktop access to your Raspberry Pi, allowing yo
    ```bash
    sudo dpkg -i VNC-Viewer-7.13.1-Linux-x64.deb
    ```
-   
 4. **Fix Dependency Issues (if necessary):**
+
    ```bash
    sudo apt-get install -f
    ```
