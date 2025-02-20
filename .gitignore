@@ -1,0 +1,111 @@
+########################################
+# OS-Specific / Editor-Specific
+########################################
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+desktop.ini
+
+# IDEs
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+########################################
+# General Build Artifacts
+########################################
+build/
+dist/
+out/
+bin/
+lib/
+*.log
+*.tmp
+*.temp
+*.cache
+
+########################################
+# C/C++ Artifacts
+########################################
+*.o
+*.obj
+*.lo
+*.la
+*.al
+*.so
+*.so.*
+*.dylib
+*.dll
+*.exe
+*.out
+*.dSYM/
+*.pdb
+*.mod
+*.dep
+*.pch
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+Testing/
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+
+# Autotools
+/autom4te.cache
+/aclocal.m4
+/m4/
+/Makefile.in
+/Makefile
+/configure
+/config.log
+/config.status
+/libtool
+/ltmain.sh
+/stamp-h1
+
+########################################
+# Python
+########################################
+# Byte-compiled or optimized
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environments
+.venv/
+venv/
+ENV/
+env/
+.venv-*/
+venv-*/
+ENV-*/
+env-*/
+
+# Distribution / Packaging
+*.egg-info/
+.eggs/
+*.egg
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+########################################
+# Archives
+########################################
+*.tar
+*.gz
+*.zip
+*.rar
+*.7z
