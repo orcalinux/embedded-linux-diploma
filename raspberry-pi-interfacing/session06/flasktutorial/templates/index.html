@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Flask App</title>
+  </head>
+  <body>
+    <h1>Welcome to My Flask App</h1>
+    <p>This page shows a list of items, plus some extra info at the end.</p>
+
+    <ul>
+      {% for item in items %} {% if item == '50' %}
+      <li style="color: rgba(4, 68, 207, 0.827)">{{ item }}</li>
+      {% else %}
+      <li>{{ item }}</li>
+      {% endif %} {% endfor %}
+    </ul>
+
+    <p>Value: {{ value }}</p>
+    <p>Calculation: {{ cal }}</p>
+
+    <footer>
+      <p>Thank you for visiting!</p>
+    </footer>
+  </body>
+</html>
