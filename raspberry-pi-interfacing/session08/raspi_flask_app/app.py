@@ -9,7 +9,7 @@ led_list = [LED(17), LED(27), LED(22)]
 for led in led_list:
     led.off()
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder="templates")
 
 @app.route("/")
 def index():
