@@ -1,22 +1,30 @@
-async function checkStatus() {
-  try {
-    let response = await fetch("/push-button");
-    let data = await response.json();
+const statusElem = document.getElementById("buttonStatus");
+const refreshBtn = document.getElementById("refreshBtn");
 
-    const statusElem = document.getElementById("button-status");
+async function getButtonStatus() {
+  try {
+    const response = await fetch("/push-button");
+    const data = await response.json(); // { pressed: true/false }
     if (data.pressed) {
-      statusElem.textContent = "Button is pressed!";
+      statusElem.textContent = "Button is pressed";
       statusElem.style.color = "red";
     } else {
-      statusElem.textContent = "Button is not pressed.";
+      statusElem.textContent = "Button is not pressed";
       statusElem.style.color = "green";
     }
   } catch (err) {
-    console.error(err);
-    document.getElementById("button-status").textContent =
-      "Error fetching status.";
+    console.error("Error:", err);
+    statusElem.textContent = "Error fetching button status";
+    statusElem.style.color = "gray";
   }
 }
 
-// Optionally check status automatically every few seconds:
-// setInterval(checkStatus, 2000);
+// If the elements exist on this page, add event listener
+if (refreshBtn) {
+  refreshBtn.addEventListener("click", getButtonStatus);
+}
+// Optionally auto-update every 2 seconds
+// setInterval(getButtonStatus, 2000);
+
+// On page load, fetch status initially
+window.addEventListener("load", getButtonStatus);

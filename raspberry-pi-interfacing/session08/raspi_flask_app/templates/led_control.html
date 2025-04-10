@@ -1,0 +1,19 @@
+{% extends "base.html" %} {% block title %}LED Control{% endblock %} {% block
+content %}
+<h2>LED Control Page</h2>
+
+<div>
+  <p>Choose an LED (0, 1, or 2) and toggle ON/OFF:</p>
+  <select id="ledSelect">
+    <option value="0">LED 0</option>
+    <option value="1">LED 1</option>
+    <option value="2">LED 2</option>
+  </select>
+  <button onclick="turnLedOn()">ON</button>
+  <button onclick="turnLedOff()">OFF</button>
+</div>
+
+<div id="ledMessage"></div>
+{% endblock %} {% block scripts %}
+<script src="{{ url_for('static', filename='js/led_control.js') }}"></script>
+{% endblock %}

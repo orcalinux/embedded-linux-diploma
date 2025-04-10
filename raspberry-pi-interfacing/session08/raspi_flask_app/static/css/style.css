@@ -1,8 +1,26 @@
 body {
   font-family: Arial, sans-serif;
-  margin: 20px;
+  margin: 1em;
 }
-#button-status {
-  font-size: 1.2rem;
+
+h1,
+h2 {
+  color: #333;
+}
+
+nav a {
+  margin-right: 10px;
+  text-decoration: none;
+  color: #0066cc;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+#ledMessage,
+#buttonStatus {
+  font-weight: bold;
+  margin-top: 1em;
   color: green;
 }
