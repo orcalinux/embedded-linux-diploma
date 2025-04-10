@@ -1,0 +1,8 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+}
+#button-status {
+  font-size: 1.2rem;
+  color: green;
+}

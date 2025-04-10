@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>{% block title %}Raspberry Pi Flask App{% endblock %}</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+  <body>
+    <!-- Navigation / Header (common) -->
+    <header>
+      <h1>Raspberry Pi Web Interface</h1>
+      <hr />
+    </header>
+
+    <!-- Main content from child templates -->
+    <section>{% block content %}{% endblock %}</section>
+
+    <!-- Footer (common) -->
+    <footer>
+      <hr />
+      <p>&copy; 2023 Raspberry Pi Flask Demo</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  </body>
+</html>
