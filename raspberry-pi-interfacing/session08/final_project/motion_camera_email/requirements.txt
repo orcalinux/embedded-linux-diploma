@@ -1,0 +1,3 @@
+gpiozero==1.6.2
+picamzero==0.2.0
+yagmail==0.14.265

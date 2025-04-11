@@ -1,0 +1,16 @@
+body {
+  /* A subtle background color or use .bg-light in the HTML body */
+}
+
+h1,
+h2,
+h3 {
+  color: #333;
+}
+
+/* Example custom style for the table images if needed */
+img {
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  padding: 2px;
+}

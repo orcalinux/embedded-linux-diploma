@@ -1,0 +1,29 @@
+{% extends "base.html" %} {% block title %}Photo Logs{% endblock %} {% block
+content %}
+<h1>Photo Logs</h1>
+
+{% if photos|length == 0 %}
+<p>No photos found in the log file.</p>
+{% else %}
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">File Path</th>
+      <th scope="col">Preview</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for photo_path in photos %}
+    <tr>
+      <td>{{ loop.index }}</td>
+      <td>{{ photo_path }}</td>
+      <td>
+        <!-- Serve photo from the same folder; limit width -->
+        <img src="{{ photo_path }}" alt="Photo" style="max-width: 200px" />
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %} {% endblock %}
