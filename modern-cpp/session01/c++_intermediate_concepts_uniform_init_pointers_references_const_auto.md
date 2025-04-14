@@ -1,7 +1,3 @@
-Below is the **updated README** that includes the initialization forms shown in your screenshot, **in addition** to the examples for pointers, references, `const`, etc. Note that many of these initialization techniques (copy vs. direct vs. list initialization) predate C++11, but modern “**uniform initialization**” with braces (`{}`) was standardized in C++11 to unify and clarify them.
-
----
-
 # C++ Fundamentals
 
 This document covers several intermediate C++ topics:
