@@ -1,4 +1,4 @@
-# C++ Fundamentals
+# Basic Language Facilities - Part 01
 
 This document covers four fundamental topics in C++:
 
@@ -588,5 +588,3 @@ int main() {
 
 4. **Functions Basics Part II**
    - Overloading, default parameters, `inline`/`constexpr`, and more advanced function techniques.
-
-Remember to compile with a C++ compiler (e.g., `g++ -std=c++17 main.cpp -o main`) to experiment with these examples. By mastering these fundamentals, you’ll be well-prepared to explore more advanced C++ features such as templates, classes, exceptions, and the standard library’s containers and algorithms.

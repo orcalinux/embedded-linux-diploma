@@ -1,4 +1,4 @@
-# C++ Fundamentals
+# Basic Language Facilities - Part 02
 
 This document covers several intermediate C++ topics:
 
@@ -664,5 +664,3 @@ int main() {
 4. **Type Inference** (`auto`):
    - Reduces repetition in variable declarations.
    - Always ensure the initializer is unambiguous (e.g., no overloaded function calls).
-
-By combining these features, you’ll write safer, more expressive, and more modern C++ code. Experiment with different initialization styles, especially in contexts like arrays, dynamic allocations, and structs/classes, to see which fits best.
