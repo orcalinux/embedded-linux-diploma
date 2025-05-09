@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+
 class Integer
 {
 	int *m_pInt;
@@ -20,6 +21,6 @@ public:
 	int GetValue() const;
 
 	void SetValue(int value);
-	
+
 	~Integer();
 };
