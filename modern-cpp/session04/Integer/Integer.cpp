@@ -16,15 +16,15 @@ Integer::Integer(int value)
 Integer::Integer(const Integer &obj)
 {
 	std::cout << "Integer(const Integer&)" << std::endl;
-	m_pInt = new int(*obj.m_pInt);
+	m_pInt = new int(*(obj.m_pInt));
 }
 
-Integer::Integer(Integer &&obj)
-{
-	std::cout << "Integer(int&&)" << std::endl;
-	m_pInt = obj.m_pInt;
-	obj.m_pInt = nullptr;
-}
+// Integer::Integer(Integer &&obj)
+// {
+// 	std::cout << "Integer(int&&)" << std::endl;
+// 	m_pInt = obj.m_pInt;
+// 	obj.m_pInt = nullptr;
+// }
 
 int Integer::GetValue() const
 {
