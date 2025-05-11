@@ -7,6 +7,8 @@
 #include "Complex.hpp"
 #include <iostream>
 
+int Complex::count = 0;
+
 Complex::Complex(int real, int imag) : real(real), imag(imag) {}
 
 Complex::Complex(const Complex &c) : real(c.real), imag(c.imag)

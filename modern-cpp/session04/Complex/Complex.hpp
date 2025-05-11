@@ -16,6 +16,8 @@ private:
 	int imag;
 
 public:
+	static int count; // declare static variable
+
 	// Default constructor
 	Complex() : Complex(0, 0) {}
 
@@ -31,7 +33,7 @@ public:
 	// Display function
 	void display();
 
-	// Friend Method
+	// Friend Methods
 	friend Complex operator+(Complex &c1, Complex &c2);
 	friend std::ostream &operator<<(std::ostream &out, Complex &c);
 	friend std::istream &operator>>(std::istream &in, Complex &c);
