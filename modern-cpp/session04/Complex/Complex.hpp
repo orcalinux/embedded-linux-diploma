@@ -19,13 +19,16 @@ public:
 	static int count; // declare static variable
 
 	// Default constructor
-	Complex() : Complex(0, 0) {}
+	Complex();
 
 	// Constructor
 	Complex(int real, int imag);
 
 	// Copy constructor
 	Complex(const Complex &c);
+
+	// Destructor
+	~Complex();
 
 	// Add function
 	void add(Complex &c);
