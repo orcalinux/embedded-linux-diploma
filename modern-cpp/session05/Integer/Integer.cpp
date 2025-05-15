@@ -1,7 +1,7 @@
 /**
  * Complex.cpp
  *
- *  Created on: May 9, 2025
+ *  Created on: May 14, 2025
  *      Author: mahmoud
  */
 #include "Integer.hpp"
@@ -28,35 +28,35 @@ Integer::Integer(const Integer &obj)
 Integer::Integer(Integer &&obj)
 {
 	std::cout << "Integer(int&&)" << std::endl;
-	m_pInt = obj.m_pInt;
+	this->m_pInt = obj.m_pInt;
 	obj.m_pInt = nullptr;
 }
 
-// Copy-assignment
-Integer &Integer::operator=(const Integer &rhs)
+Integer &Integer::operator=(Integer &obj)
 {
-	std::cout << "operator=(const Integer&)" << std::endl;
-	if (this != &rhs)
+	std::cout << "operator=(Integer&)" << std::endl;
+	if (this != &obj)
 	{
-		// free old
-		delete m_pInt;
-		// deep-copy from rhs
-		m_pInt = new int{*rhs.m_pInt};
+		if (m_pInt != nullptr)
+		{
+			delete m_pInt;
+			m_pInt = new int(*(obj.m_pInt));
+		}
 	}
 	return *this;
 }
 
-// Move-assignment
-Integer &Integer::operator=(Integer &&rhs)
+Integer &Integer::operator=(Integer &&obj)
 {
 	std::cout << "operator=(Integer&&)" << std::endl;
-	if (this != &rhs)
+	if (this != &obj)
 	{
-		// free old
-		delete m_pInt;
-		// steal pointer, leave rhs in a valid state
-		m_pInt = rhs.m_pInt;
-		rhs.m_pInt = nullptr;
+		if (m_pInt != nullptr)
+		{
+			delete m_pInt;
+			m_pInt = obj.m_pInt;
+			obj.m_pInt = nullptr;
+		}
 	}
 	return *this;
 }
@@ -68,6 +68,8 @@ int Integer::GetValue() const
 
 void Integer::SetValue(int value)
 {
+	if (!m_pInt)
+		m_pInt = new int;
 	*m_pInt = value;
 }
 

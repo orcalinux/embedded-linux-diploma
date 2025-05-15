@@ -24,16 +24,19 @@ public:
 	// Move constructor
 	Integer(Integer &&obj);
 
-	// Copy-assignment
-	Integer& operator=(const Integer& rhs);
+	// Copy operator
+	Integer &operator=(Integer &obj);
 
-	// Move-assignment
-	Integer& operator=(Integer&& rhs);
+	// Move operator
+	Integer &operator=(Integer &&obj);
 
+	// Returns the value of the integer
 	int GetValue() const;
 
+	// Set the value of the integer
 	void SetValue(int value);
 
+	// Destructor
 	~Integer();
 };
 
