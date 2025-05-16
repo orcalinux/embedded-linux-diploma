@@ -6,6 +6,7 @@
  */
 #include "Integer.hpp"
 #include <iostream>
+#include <ostream>
 
 Integer::Integer()
 {
@@ -71,6 +72,12 @@ void Integer::SetValue(int value)
 	if (!m_pInt)
 		m_pInt = new int;
 	*m_pInt = value;
+}
+
+std::ostream &operator<<(std::ostream &os, const Integer &obj)
+{
+	os << *obj.m_pInt;
+	return os;
 }
 
 Integer::~Integer()

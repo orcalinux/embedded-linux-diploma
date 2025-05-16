@@ -15,6 +15,12 @@ Integer add(int a, int b)
 
 int main()
 {
-    Integer a = 3; // Integer a = Integer(3);
+    alignas(Integer) unsigned char buffer[sizeof(Integer)];
+    Integer *p = new (buffer) Integer(42);
+
+    std::cout << "Value: " << *p << std::endl;
+
+    p->~Integer();
+
     return 0;
 }

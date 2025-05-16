@@ -7,6 +7,8 @@
 #ifndef INTEGER_HPP_
 #define INTEGER_HPP_
 
+#include <ostream>
+
 class Integer
 {
 	int *m_pInt;
@@ -35,6 +37,8 @@ public:
 
 	// Set the value of the integer
 	void SetValue(int value);
+
+	friend std::ostream &operator<<(std::ostream &os, const Integer &obj);
 
 	// Destructor
 	~Integer();
