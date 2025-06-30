@@ -1,14 +1,21 @@
 # Bootloader Serial Protocol (BSP)
 
-> **Purpose:** Reliable, scriptable firmware delivery from PC to embedded target over UART  
-> **Version:** v0.9 · *Last updated: 2025-06-30*
+## Document Info
+
+- **Purpose**: Reliable, scriptable firmware delivery from PC to embedded target over UART
+- **Last Updated**: 2025-06-30
+- **Version**: v0.1
 
 ---
 
+## Contents
+
 <details>
-<summary><strong>Contents</strong></summary>
+<summary><strong>Table of Contents</strong></summary>
 
 - [Bootloader Serial Protocol (BSP)](#bootloader-serial-protocol-bsp)
+  - [Document Info](#document-info)
+  - [Contents](#contents)
   - [1 · Scope](#1--scope)
   - [2 · Architecture](#2--architecture)
     - [2.1 Layered View](#21-layered-view)
@@ -179,19 +186,19 @@ When the client sends only an ACK (no payload), Flags = `0x08` (b3=1, all other 
 
 ### 6.6 Single Command Duplicate ACK
 
-> **TODO:** Insert PlantUML sequence illustrating a duplicate ACK scenario for a single CRA request.
+![Single Command Duplicate ACK](image/bsp_single_command_duplicate_ack_sequence.svg)
 
 ### 6.7 Single Command ACK MISS
 
-> **TODO:** Insert PlantUML sequence illustrating a missing ACK scenario for a single CRA request.
+![Single Command ACK Miss](image/bsp_single_command_ack_miss_sequence.svg)
 
 ### 6.8 Single Corrupted Command
 
-> **TODO:** Insert PlantUML sequence illustrating a corrupted CRA command and its recovery.
+![Single Corrupted Command](image/bsp_single_corrupted_command_sequence.svg)
 
 ### 6.9 Single Command Corrupted Response
 
-> **TODO:** Insert PlantUML sequence illustrating a corrupted response frame and retry logic.
+![Single Command Corrupted Response](image/bsp_single_command_corrupted_response_sequence.svg)
 
 ---
 
@@ -248,4 +255,4 @@ When the client sends only an ACK (no payload), Flags = `0x08` (b3=1, all other 
 
 | Date       | Version | Notes                |
 | :--------- | :------ | :------------------- |
-| 2025-06-30 | v0.9    | Initial public draft |
+| 2025-06-30 | v0.1    | Initial public draft |

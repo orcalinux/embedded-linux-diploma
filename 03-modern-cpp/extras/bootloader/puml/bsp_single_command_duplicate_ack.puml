@@ -1,0 +1,214 @@
+@startuml SingleCommandDuplicateAck
+
+'──────────────────────── Visual settings ────────────────────────
+skinparam ParticipantPadding 120 '
+skinparam participant {
+    BackgroundColor #053671
+    BorderColor     #1e1e1e
+    FontColor       white
+}
+skinparam sequence {
+    ArrowColor                 #1e1e1e
+    LifeLineBorderColor        #1e1e1e
+    LifeLineBackgroundColor    #ff9f1c
+    ParticipantBorderColor     #1e1e1e
+    ParticipantBackgroundColor #053671
+    ParticipantFontColor       white
+}
+
+title **BSP Sequence – Single Command Duplicate ACK**
+
+participant "Host App"         as HA
+participant "Host Cmd Layer"   as HC
+participant "Host DTL Layer"   as HD
+participant "Host PHY Layer"   as HP
+participant "Target PHY Layer" as TP
+participant "Target DTL Layer" as TD
+participant "Target Cmd Layer" as TC
+participant "Target App"       as TA
+
+autonumber "<b>[0]</b>"
+
+'─── 1) Host sends a single command ─────────────────────────────
+activate HA
+HA -> HC : sendCommand(cmd)
+deactivate HA
+
+activate HC
+note right of HC
+  • frame CRA(cmd)  
+  • start Response-timer (200 ms)
+end note
+
+HC -> HD : wrapCRA(cmd)
+deactivate HC
+
+activate HD
+note right of HD
+  • SLIP-encode + CRC(cmd)
+end note
+
+HD --> HC : CRA_frame
+deactivate HD
+
+activate HC
+HC -> HP : sendFrame(CRA_frame)
+deactivate HC
+
+activate HP
+HP -> TP : UART bytes (CRA_frame)
+deactivate HP
+
+'─── 2) Target processes and responds ──────────────────────────
+activate TP
+TP -> TD : deliverBytes()
+deactivate TP
+
+activate TD
+note right of TD
+  • SLIP-decode  
+  • verify CRC
+end note
+
+TD -> TC : extractCRA(cmd)
+deactivate TD
+
+activate TC
+TC -> TA : deliverCommand(cmd)
+deactivate TC
+
+activate TA
+TA --> TC : sendResponse(resp)
+deactivate TA
+
+activate TC
+note right of TC
+  • wrap CRA(resp)  
+  • reset ACK-timer
+end note
+
+TC -> TD : wrapCRA(resp)
+deactivate TC
+
+activate TD
+note right of TD
+  • SLIP-encode + CRC(resp)
+end note
+
+TD -> TP : sendFrame(resp)
+deactivate TD
+
+activate TP
+TP -> HP : UART bytes (resp)
+deactivate TP
+
+'─── 3) Host receives response ────────────────────────────────
+activate HP
+HP -> HD : deliverBytes()
+deactivate HP
+
+activate HD
+note right of HD
+  • SLIP-decode  
+  • verify CRC
+end note
+
+HD -> HC : extractCRA(resp)
+deactivate HD
+
+activate HC
+note right of HC
+  • parse status  
+  • stop Response-timer
+end note
+
+'─── 4) Host sends first ACK ──────────────────────────────────
+HC -> HA : deliverResponse(resp)
+deactivate HC
+
+activate HA
+HA --> HC : sendACK()
+deactivate HA
+
+activate HC
+note right of HC
+  • Flags=0x08 only  
+  • no payload  
+  • (no new timers)
+end note
+
+HC -> HD : wrapCRA(ACK)
+deactivate HC
+
+activate HD
+note right of HD
+  • build ACK frame
+end note
+
+HD --> HC : ACK_frame
+deactivate HD
+
+activate HC
+HC -> HP : sendFrame(ACK_frame)
+deactivate HC
+
+activate HP
+HP -> TP : UART bytes (ACK)
+deactivate HP
+
+activate TP
+TP -> TD : deliverBytes()
+deactivate TP
+
+activate TD
+note right of TD
+  • extractCRA(ACK)  
+  • stop ACK-timer
+end note
+
+TD --> HA : <font color="red">duplicate ACK ignored</font>
+deactivate TD
+
+'─── 5) Host (erroneously) sends duplicate ACK ────────────────
+activate HA
+HA --> HC : sendACK() <<duplicate>>
+deactivate HA
+
+activate HC
+note right of HC
+  • wrapCRA(ACK)  
+  • (duplicate; no timer)
+end note
+
+HC -> HD : wrapCRA(ACK)
+deactivate HC
+
+activate HD
+note right of HD
+  • build duplicate ACK frame
+end note
+
+HD --> HC : ACK_frame_dup
+deactivate HD
+
+activate HC
+HC -> HP : sendFrame(ACK_frame_dup)
+deactivate HC
+
+activate HP
+HP -> TP : UART bytes (ACK) <<duplicate>>
+deactivate HP
+
+activate TP
+TP -> TD : deliverBytes() [duplicate ACK]
+deactivate TP
+
+activate TD
+note right of TD
+  • extractCRA(ACK)  
+  • **duplicate → ignored**
+end note
+
+deactivate TD
+
+@enduml
