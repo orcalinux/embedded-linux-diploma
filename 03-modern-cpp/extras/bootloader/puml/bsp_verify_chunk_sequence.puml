@@ -1,0 +1,161 @@
+@startuml bsp_verify_chunk_sequence
+
+'──────────────────────── Visual settings ────────────────────────
+skinparam ParticipantPadding 120 '
+skinparam participant {
+    BackgroundColor #053671
+    BorderColor     #1e1e1e
+    FontColor       white
+}
+skinparam sequence {
+    ArrowColor                 #1e1e1e
+    LifeLineBorderColor        #1e1e1e
+    LifeLineBackgroundColor    #ff9f1c
+    ParticipantBorderColor     #1e1e1e
+    ParticipantBackgroundColor #053671
+    ParticipantFontColor       white
+}
+
+title **BSP Sequence – Verify Chunk Sequence**
+
+participant "Host App"         as HA
+participant "Host Cmd Layer"   as HC
+participant "Host DTL Layer"   as HD
+participant "Host PHY Layer"   as HP
+participant "Target PHY Layer" as TP
+participant "Target DTL Layer" as TD
+participant "Target Cmd Layer" as TC
+participant "Target App"       as TA
+
+autonumber "<b>[0]</b>"
+
+'─── 1) Host sends VERIFY_CHUNK command ────────────────────────
+activate HA
+HA -> HC : sendCommand(VERIFY_CHUNK, chunk1)
+deactivate HA
+
+activate HC
+note right of HC
+  • Frame CRA(VERIFY_CHUNK, Session ID=0x03)  
+  • Start Response-timer (200 ms)
+end note
+HC -> HD : wrapCRA(VERIFY_CHUNK, chunk1)
+deactivate HC
+
+activate HD
+note right of HD
+  • SLIP+CRC(VERIFY_CHUNK)
+end note
+HD --> HC : CRA_verify
+deactivate HD
+
+activate HC
+HC -> HP : sendFrame(CRA_verify)
+deactivate HC
+
+activate HP
+HP -> TP : UART bytes (CRA_verify)
+deactivate HP
+
+'─── 2) Target processes VERIFY_CHUNK ──────────────────────────
+activate TP
+TP -> TD : deliverBytes() [CRA_verify]
+deactivate TP
+
+activate TD
+note right of TD
+  • SLIP-decode  
+  • CRC check OK
+end note
+TD -> TC : extractCRA(VERIFY_CHUNK)
+deactivate TD
+
+activate TC
+TC -> TA : deliverCommand(VERIFY_CHUNK)
+deactivate TC
+
+activate TA
+note right of TA
+  • Verify chunk1 CRC
+end note
+TA --> TC : sendResponse(verify_resp, Status=0x00)
+deactivate TA
+
+activate TC
+note right of TC
+  • Wrap CRA(verify_resp, Session ID=0x03)  
+  • Start ACK-timer (200 ms)
+end note
+TC -> TD : wrapCRA(verify_resp)
+deactivate TC
+
+activate TD
+note right of TD
+  • SLIP+CRC(verify_resp)
+end note
+TD -> TP : sendFrame(verify_resp)
+deactivate TD
+
+activate TP
+TP -> HP : UART bytes (verify_resp)
+deactivate TP
+
+'─── 3) Host processes VERIFY_CHUNK response & sends ACK ───────
+activate HP
+HP -> HD : deliverBytes() [verify_resp]
+deactivate HP
+
+activate HD
+note right of HD
+  • SLIP-decode  
+  • CRC check OK
+end note
+HD -> HC : extractCRA(verify_resp)
+deactivate HD
+
+activate HC
+note right of HC
+  • Parse status (OK)  
+  • Stop Response-timer
+end note
+HC -> HA : deliverResponse(verify_resp)
+deactivate HC
+
+activate HA
+HA --> HC : sendACK() [for verify_resp]
+deactivate HA
+
+activate HC
+note right of HC
+  • Wrap CRA(ACK, Session ID=0x03, Flags=0x08)
+end note
+HC -> HD : wrapCRA(ACK)
+deactivate HC
+
+activate HD
+note right of HD
+  • Build ACK frame
+end note
+HD --> HC : ACK_verify
+deactivate HD
+
+activate HC
+HC -> HP : sendFrame(ACK_verify)
+deactivate HC
+
+activate HP
+HP -> TP : UART bytes (ACK_verify)
+deactivate HP
+
+activate TP
+TP -> TD : deliverBytes() [ACK_verify]
+deactivate TP
+
+activate TD
+note right of TD
+  • Extract CRA(ACK)  
+  • Stop ACK-timer
+end note
+deactivate TD
+
+@enduml

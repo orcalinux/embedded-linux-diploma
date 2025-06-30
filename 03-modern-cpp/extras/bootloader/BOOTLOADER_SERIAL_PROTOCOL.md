@@ -31,6 +31,10 @@
   - [6 · Interaction Sequences](#6--interaction-sequences)
     - [6.1 Layered Sequence](#61-layered-sequence)
     - [6.2 Full Flash Flow](#62-full-flash-flow)
+      - [6.2.1 Erase Flash Sequence](#621-erase-flash-sequence)
+      - [6.2.2 Write Chunk Sequence](#622-write-chunk-sequence)
+      - [6.2.3 Verify Chunk Sequence](#623-verify-chunk-sequence)
+      - [6.2.4 Reset and Run Sequence](#624-reset-and-run-sequence)
     - [6.3 Error \& Retry](#63-error--retry)
     - [6.4 Multiple Requests All Success Case](#64-multiple-requests-all-success-case)
     - [6.5 Multiple Requests Timeout Case](#65-multiple-requests-timeout-case)
@@ -170,7 +174,23 @@ When the client sends only an ACK (no payload), Flags = `0x08` (b3=1, all other 
 
 ### 6.2 Full Flash Flow
 
-![Full Flash Flow](image/bsp_full_flash_flow_sequence.svg)
+The full flash flow is divided into individual sequences for each command phase, illustrating the complete process of erasing, programming, verifying, and running firmware on a remote MCU.
+
+#### 6.2.1 Erase Flash Sequence
+
+![Erase Flash Sequence](image/bsp_erase_flash_sequence.svg)
+
+#### 6.2.2 Write Chunk Sequence
+
+![Write Chunk Sequence](image/bsp_write_chunk_sequence.svg)
+
+#### 6.2.3 Verify Chunk Sequence
+
+![Verify Chunk Sequence](image/bsp_verify_chunk_sequence.svg)
+
+#### 6.2.4 Reset and Run Sequence
+
+![Reset and Run Sequence](image/bsp_reset_and_run_sequence.svg)
 
 ### 6.3 Error & Retry
 

@@ -1,0 +1,161 @@
+@startuml bsp_erase_flash_sequence
+
+'──────────────────────── Visual settings ────────────────────────
+skinparam ParticipantPadding 120 '
+skinparam participant {
+    BackgroundColor #053671
+    BorderColor     #1e1e1e
+    FontColor       white
+}
+skinparam sequence {
+    ArrowColor                 #1e1e1e
+    LifeLineBorderColor        #1e1e1e
+    LifeLineBackgroundColor    #ff9f1c
+    ParticipantBorderColor     #1e1e1e
+    ParticipantBackgroundColor #053671
+    ParticipantFontColor       white
+}
+
+title **BSP Sequence – Erase Flash Sequence**
+
+participant "Host App"         as HA
+participant "Host Cmd Layer"   as HC
+participant "Host DTL Layer"   as HD
+participant "Host PHY Layer"   as HP
+participant "Target PHY Layer" as TP
+participant "Target DTL Layer" as TD
+participant "Target Cmd Layer" as TC
+participant "Target App"       as TA
+
+autonumber "<b>[0]</b>"
+
+'─── 1) Host initiates ERASE_FLASH command ─────────────────────
+activate HA
+HA -> HC : sendCommand(ERASE_FLASH)
+deactivate HA
+
+activate HC
+note right of HC
+  • Frame CRA(ERASE_FLASH, Session ID=0x01)  
+  • Start Response-timer (200 ms)
+end note
+HC -> HD : wrapCRA(ERASE_FLASH)
+deactivate HC
+
+activate HD
+note right of HD
+  • SLIP+CRC(ERASE_FLASH)
+end note
+HD --> HC : CRA_erase
+deactivate HD
+
+activate HC
+HC -> HP : sendFrame(CRA_erase)
+deactivate HC
+
+activate HP
+HP -> TP : UART bytes (CRA_erase)
+deactivate HP
+
+'─── 2) Target processes ERASE_FLASH ───────────────────────────
+activate TP
+TP -> TD : deliverBytes() [CRA_erase]
+deactivate TP
+
+activate TD
+note right of TD
+  • SLIP-decode  
+  • CRC check OK
+end note
+TD -> TC : extractCRA(ERASE_FLASH)
+deactivate TD
+
+activate TC
+TC -> TA : deliverCommand(ERASE_FLASH)
+deactivate TC
+
+activate TA
+note right of TA
+  • Erase flash memory
+end note
+TA --> TC : sendResponse(erase_resp, Status=0x00)
+deactivate TA
+
+activate TC
+note right of TC
+  • Wrap CRA(erase_resp, Session ID=0x01)  
+  • Start ACK-timer (200 ms)
+end note
+TC -> TD : wrapCRA(erase_resp)
+deactivate TC
+
+activate TD
+note right of TD
+  • SLIP+CRC(erase_resp)
+end note
+TD -> TP : sendFrame(erase_resp)
+deactivate TD
+
+activate TP
+TP -> HP : UART bytes (erase_resp)
+deactivate TP
+
+'─── 3) Host processes ERASE_FLASH response & sends ACK ────────
+activate HP
+HP -> HD : deliverBytes() [erase_resp]
+deactivate HP
+
+activate HD
+note right of HD
+  • SLIP-decode  
+  • CRC check OK
+end note
+HD -> HC : extractCRA(erase_resp)
+deactivate HD
+
+activate HC
+note right of HC
+  • Parse status (OK)  
+  • Stop Response-timer
+end note
+HC -> HA : deliverResponse(erase_resp)
+deactivate HC
+
+activate HA
+HA --> HC : sendACK() [for erase_resp]
+deactivate HA
+
+activate HC
+note right of HC
+  • Wrap CRA(ACK, Session ID=0x01, Flags=0x08)
+end note
+HC -> HD : wrapCRA(ACK)
+deactivate HC
+
+activate HD
+note right of HD
+  • Build ACK frame
+end note
+HD --> HC : ACK_erase
+deactivate HD
+
+activate HC
+HC -> HP : sendFrame(ACK_erase)
+deactivate HC
+
+activate HP
+HP -> TP : UART bytes (ACK_erase)
+deactivate HP
+
+activate TP
+TP -> TD : deliverBytes() [ACK_erase]
+deactivate TP
+
+activate TD
+note right of TD
+  • Extract CRA(ACK)  
+  • Stop ACK-timer
+end note
+deactivate TD
+
+@enduml
