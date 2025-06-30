@@ -1,0 +1,178 @@
+@startuml LayeredSequenceDetailed
+
+'──────────────────────── Visual settings ────────────────────────
+skinparam ParticipantPadding 120 '
+
+skinparam participant {
+    BackgroundColor #053671
+    BorderColor     #1e1e1e
+    FontColor       white
+}
+skinparam sequence {
+    ArrowColor                 #1e1e1e
+    LifeLineBorderColor        #1e1e1e
+    LifeLineBackgroundColor    #ff9f1c
+    ParticipantBorderColor     #1e1e1e
+    ParticipantBackgroundColor #053671
+    ParticipantFontColor       white
+}
+
+title **BSP Layered Sequence – Detailed CRA Transaction**
+
+participant "Host App"         as HA
+participant "Host Cmd Layer"   as HC
+participant "Host DTL Layer"   as HD
+participant "Host PHY Layer"   as HP
+participant "Target PHY Layer" as TP
+participant "Target DTL Layer" as TD
+participant "Target Cmd Layer" as TC
+participant "Target App"       as TA
+
+autonumber "<b>[0]</b>"
+
+'─── 1) Host begins CRA send ────────────────────────────────────
+HA -> HC : sendCommand(cmd)
+activate HC
+note right of HC
+  • frame CRA header  
+  • start Response-timer (200 ms)
+end note
+
+'─── 2) Command → DTL: wrap + CRC ───────────────────────────────
+HC -> HD : wrapCRA(cmd)
+deactivate HC
+activate HD
+note right of HD
+  • compute CRC-16 over payload  
+  • SLIP-encode frame
+end note
+HD --> HC : CRA_frame
+deactivate HD
+activate HC
+
+'─── 3) DTL → PHY: transmit ─────────────────────────────────────
+HC -> HP : sendFrame(CRA_frame)
+deactivate HC
+activate HP
+HP -> HP : shiftOut bytes over UART
+
+'─── 4) Target PHY → DTL: receive ──────────────────────────────
+HP -> TP : UART bytes
+deactivate HP
+activate TP
+TP -> TD : deliverBytes()
+note right of TD
+  • SLIP-decode frame  
+  • verify CRC-16
+end note
+deactivate TP
+activate TD
+
+'─── 5) DTL → Cmd: extract + ACK-timer ──────────────────────────
+TD -> TC : extractCRA(cmd)
+deactivate TD 
+activate TC
+note right of TC
+  • parse fields  
+  • start ACK-timer (200 ms)
+end note
+
+'─── 6) Target executes & responds ──────────────────────────────
+TC -> TA : deliverCommand(cmd)
+deactivate TC
+activate TA
+TA --> TC : sendResponse(resp)
+deactivate TA
+activate TC
+note right of TC
+  • wrap CRA header  
+  • include status  
+  • reset ACK-timer
+end note
+
+'─── 7) Response: DTL wrap + CRC ─────────────────────────────────
+TC -> TD : wrapCRA(resp)
+deactivate TC
+activate TD
+note right of TD
+  • compute CRC-16  
+  • SLIP-encode
+end note
+
+TD --> TC : CRA_frame_resp
+deactivate TD
+activate TC
+
+'─── 8) Response: PHY transmit ──────────────────────────────────
+TC -> TP : sendFrame(CRA_frame_resp)
+deactivate TC
+activate TP
+TP -> TP : shiftOut bytes
+
+
+'─── 9) Host PHY → DTL: receive ─────────────────────────────────
+TP -> HP : UART bytes
+deactivate TP
+activate HP
+HP -> HD : deliverBytes()
+deactivate HP
+activate HD
+note right of HD
+  • SLIP-decode frame  
+  • verify CRC-16
+end note
+deactivate HP
+
+'───10) DTL → Cmd: extract & stop timer─────────────────────────
+HD --> HC : extractCRA(resp)
+deactivate HD
+activate HC
+note right of HC
+  • parse status  
+  • stop Response-timer
+end note
+
+'───11) Host ACK send & Cmd‐Layer processing─────────────────────
+HC --> HA : deliverResponse(resp)
+deactivate HC
+activate HA
+HA --> HC : sendACK()
+deactivate HA
+
+activate HC
+note right of HC
+  • Flags = 0x08 only  
+  • no payload  
+  • restart Response-timer
+end note
+
+'───12) ACK: wrap, send, target stops timer─────────────────────
+HC -> HD : wrapCRA(ACK)
+deactivate HC
+activate HD
+note right of HD
+  • build 1-byte ACK frame  
+  • no payload
+end note
+HD --> HC : ACK_frame
+deactivate HD
+activate HC 
+
+HC -> HP : sendFrame(ACK_frame)
+deactivate HC 
+activate HP
+HP -> TP : UART bytes
+deactivate HP
+activate TP
+
+TP -> TD : deliverBytes()
+deactivate TP
+activate TD
+note right of TD
+  • extractCRA(ACK)  
+  • stop ACK-timer
+end note
+deactivate TD
+deactivate TP
+
+@enduml
