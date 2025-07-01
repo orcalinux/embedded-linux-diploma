@@ -1,0 +1,198 @@
+@startuml gsp_crc_error_retry_sequence
+
+'──────────────────────── Visual settings ────────────────────────
+skinparam ParticipantPadding 120 '
+skinparam participant {
+    BackgroundColor #053671
+    BorderColor     #1e1e1e
+    FontColor       white
+}
+skinparam sequence {
+    ArrowColor                 #1e1e1e
+    LifeLineBorderColor        #1e1e1e
+    LifeLineBackgroundColor    #ff9f1c
+    ParticipantBorderColor     #1e1e1e
+    ParticipantBackgroundColor #053671
+    ParticipantFontColor       white
+}
+
+title **BSP Sequence – CRC Error Auto-Retry**
+
+participant "Host App"         as HA
+participant "Host Cmd Layer"   as HC
+participant "Host DTL Layer"   as HD
+participant "Host PHY Layer"   as HP
+participant "Target PHY Layer" as TP
+participant "Target DTL Layer" as TD
+participant "Target Cmd Layer" as TC
+participant "Target App"       as TA
+
+autonumber "<b>[0]</b>"
+
+'─── 1) Host sends a command (corrupted) ──────────────────────
+activate HA
+HA -> HC : sendCommand(WRITE_CHUNK, chunk1)
+deactivate HA
+
+activate HC
+note right of HC
+  • Frame CRA(WRITE_CHUNK, Session ID=0x05)  
+  • Start Response-timer (200 ms)
+end note
+HC -> HD : wrapCRA(WRITE_CHUNK, chunk1)
+deactivate HC
+
+activate HD
+note right of HD
+  • SLIP+CRC(chunk1, Seq#=0, Len=256)
+end note
+HD --> HC : CRA_write1
+deactivate HD
+
+activate HC
+HC -> HP : sendFrame(CRA_write1)
+deactivate HC
+
+activate HP
+HP -> TP : UART bytes (CRA_write1) <color:red>corrupted</color>
+deactivate HP
+
+'─── 2) Target detects CRC error and discards ────────────────
+activate TP
+TP -> TD : deliverBytes() [corrupted CRA_write1]
+deactivate TP
+
+activate TD
+note right of TD
+  • SLIP-decode  
+  • CRC check fails
+end note
+TD -> TC : <color:red>discard (bad CRC)</color>
+deactivate TD
+
+'─── 3) Host Response-timer expires & retries ────────────────
+activate HC
+note right of HC
+  • Response-timer expires (200 ms)  
+  • Retry sendCommand(WRITE_CHUNK, chunk1) (Attempt 1 of 5)
+end note
+HC -> HD : wrapCRA(WRITE_CHUNK, chunk1) «retry»
+deactivate HC
+
+activate HD
+note right of HD
+  • SLIP+CRC(chunk1, Seq#=0, Len=256)
+end note
+HD --> HC : CRA_write1_retry
+deactivate HD
+
+activate HC
+HC -> HP : sendFrame(CRA_write1_retry)
+deactivate HC
+
+activate HP
+HP -> TP : UART bytes (CRA_write1_retry)
+deactivate HP
+
+'─── 4) Target processes retry successfully ──────────────────
+activate TP
+TP -> TD : deliverBytes() [CRA_write1_retry]
+deactivate TP
+
+activate TD
+note right of TD
+  • SLIP-decode  
+  • CRC check OK
+end note
+TD -> TC : extractCRA(WRITE_CHUNK, chunk1)
+deactivate TD
+
+activate TC
+TC -> TA : deliverCommand(WRITE_CHUNK, chunk1)
+deactivate TC
+
+activate TA
+note right of TA
+  • Write chunk1 to flash
+end note
+TA --> TC : sendResponse(write_resp1, Status=0x00)
+deactivate TA
+
+activate TC
+note right of TC
+  • Wrap CRA(write_resp1, Session ID=0x05)  
+  • Start ACK-timer (200 ms)
+end note
+TC -> TD : wrapCRA(write_resp1)
+deactivate TC
+
+activate TD
+note right of TD
+  • SLIP+CRC(write_resp1)
+end note
+TD -> TP : sendFrame(write_resp1)
+deactivate TD
+
+activate TP
+TP -> HP : UART bytes (write_resp1)
+deactivate TP
+
+'─── 5) Host processes response & sends ACK ──────────────────
+activate HP
+HP -> HD : deliverBytes() [write_resp1]
+deactivate HP
+
+activate HD
+note right of HD
+  • SLIP-decode  
+  • CRC check OK
+end note
+HD -> HC : extractCRA(write_resp1)
+deactivate HD
+
+activate HC
+note right of HC
+  • Parse status (OK)  
+  • Stop Response-timer
+end note
+HC -> HA : deliverResponse(write_resp1)
+deactivate HC
+
+activate HA
+HA --> HC : sendACK() [for write_resp1]
+deactivate HA
+
+activate HC
+note right of HC
+  • Wrap CRA(ACK, Session ID=0x05, Flags=0x04)
+end note
+HC -> HD : wrapCRA(ACK)
+deactivate HC
+
+activate HD
+note right of HD
+  • Build ACK frame
+end note
+HD --> HC : ACK_write1
+deactivate HD
+
+activate HC
+HC -> HP : sendFrame(ACK_write1)
+deactivate HC
+
+activate HP
+HP -> TP : UART bytes (ACK_write1)
+deactivate HP
+
+activate TP
+TP -> TD : deliverBytes() [ACK_write1]
+deactivate TP
+
+activate TD
+note right of TD
+  • Extract CRA(ACK)  
+  • Stop ACK-timer
+end note
+deactivate TD
+
+@enduml

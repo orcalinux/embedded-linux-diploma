@@ -1,4 +1,4 @@
-@startuml LayeredSequenceDetailed
+@startuml gsp_layered_sequence_detailed
 
 '──────────────────────── Visual settings ────────────────────────
 skinparam ParticipantPadding 120 '
@@ -141,7 +141,7 @@ deactivate HA
 
 activate HC
 note right of HC
-  • Flags = 0x08 only  
+  • Flags = 0x04 only  
   • no payload  
   • restart Response-timer
 end note

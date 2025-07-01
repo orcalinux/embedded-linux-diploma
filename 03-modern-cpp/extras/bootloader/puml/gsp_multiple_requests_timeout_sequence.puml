@@ -1,4 +1,4 @@
-@startuml bsp_multiple_requests_timeout_sequence
+@startuml gsp_multiple_requests_timeout_sequence
 
 '──────────────────────── Visual settings ────────────────────────
 skinparam ParticipantPadding 120
@@ -135,7 +135,7 @@ deactivate HA
 
 activate HC
 note right of HC
-  • Wrap CRA(ACK, Session ID=0x06, Flags=0x08)
+  • Wrap CRA(ACK, Session ID=0x06, Flags=0x04)
 end note
 HC -> HD : wrapCRA(ACK)
 deactivate HC

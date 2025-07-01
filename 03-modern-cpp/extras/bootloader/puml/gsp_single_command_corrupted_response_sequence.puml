@@ -1,4 +1,4 @@
-@startuml SingleCommandDuplicateAck
+@startuml gsp_single_command_corrupted_response_sequence
 
 '──────────────────────── Visual settings ────────────────────────
 skinparam ParticipantPadding 120 '
@@ -16,7 +16,7 @@ skinparam sequence {
     ParticipantFontColor       white
 }
 
-title **BSP Sequence – Single Command Duplicate ACK**
+title **BSP Sequence – Single Command Corrupted Response**
 
 participant "Host App"         as HA
 participant "Host Cmd Layer"   as HC
@@ -36,18 +36,16 @@ deactivate HA
 
 activate HC
 note right of HC
-  • frame CRA(cmd)  
-  • start Response-timer (200 ms)
+  • Frame CRA(cmd)  
+  • Start Response-timer (200 ms)
 end note
-
 HC -> HD : wrapCRA(cmd)
 deactivate HC
 
 activate HD
 note right of HD
-  • SLIP-encode + CRC(cmd)
+  • SLIP+CRC(cmd)
 end note
-
 HD --> HC : CRA_frame
 deactivate HD
 
@@ -59,17 +57,16 @@ activate HP
 HP -> TP : UART bytes (CRA_frame)
 deactivate HP
 
-'─── 2) Target processes and responds ──────────────────────────
+'─── 2) Target processes command ───────────────────────────────
 activate TP
-TP -> TD : deliverBytes()
+TP -> TD : deliverBytes() [CRA]
 deactivate TP
 
 activate TD
 note right of TD
   • SLIP-decode  
-  • verify CRC
+  • CRC check OK
 end note
-
 TD -> TC : extractCRA(cmd)
 deactivate TD
 
@@ -83,68 +80,86 @@ deactivate TA
 
 activate TC
 note right of TC
-  • wrap CRA(resp)  
-  • reset ACK-timer
+  • Wrap CRA(resp, Session ID=0xXX)  
+  • Start ACK-timer (200 ms)
 end note
-
 TC -> TD : wrapCRA(resp)
 deactivate TC
 
 activate TD
 note right of TD
-  • SLIP-encode + CRC(resp)
+  • SLIP+CRC(resp)
 end note
-
 TD -> TP : sendFrame(resp)
 deactivate TD
 
+'─── 3) Response is corrupted during transmission ───────────────
 activate TP
-TP -> HP : UART bytes (resp)
+TP -> HP : UART bytes (resp) <color:red>corrupted</color>
 deactivate TP
 
-'─── 3) Host receives response ────────────────────────────────
 activate HP
-HP -> HD : deliverBytes()
+HP -> HD : deliverBytes() [corrupted resp]
 deactivate HP
 
 activate HD
 note right of HD
   • SLIP-decode  
-  • verify CRC
+  • CRC check fails
 end note
+HD -> HC : <color:red>discard (bad CRC)</color>
+deactivate HD
 
+'─── 4) Target's ACK-timer expires & retransmits response ───────
+activate TD
+note right of TD
+  • ACK-timer expires (200 ms)  
+  • Retransmit response (Session ID=0xXX)
+end note
+TD -> TP : sendFrame(resp) «retry»
+deactivate TD
+
+activate TP
+TP -> HP : UART bytes (resp) «retry»
+deactivate TP
+
+'─── 5) Host processes retransmitted response ───────────────────
+activate HP
+HP -> HD : deliverBytes() [resp retry]
+deactivate HP
+
+activate HD
+note right of HD
+  • SLIP-decode  
+  • CRC check OK
+end note
 HD -> HC : extractCRA(resp)
 deactivate HD
 
 activate HC
 note right of HC
-  • parse status  
-  • stop Response-timer
+  • Parse status  
+  • Stop Response-timer
 end note
-
-'─── 4) Host sends first ACK ──────────────────────────────────
 HC -> HA : deliverResponse(resp)
 deactivate HC
 
+'─── 6) Host sends ACK ─────────────────────────────────────────
 activate HA
-HA --> HC : sendACK()
+HA --> HC : sendACK() [for resp]
 deactivate HA
 
 activate HC
 note right of HC
-  • Flags=0x08 only  
-  • no payload  
-  • (no new timers)
+  • Wrap CRA(ACK, Session ID=0xXX, Flags=0x04)
 end note
-
 HC -> HD : wrapCRA(ACK)
 deactivate HC
 
 activate HD
 note right of HD
-  • build ACK frame
+  • Build ACK frame
 end note
-
 HD --> HC : ACK_frame
 deactivate HD
 
@@ -156,59 +171,16 @@ activate HP
 HP -> TP : UART bytes (ACK)
 deactivate HP
 
+'─── 7) Target processes ACK ───────────────────────────────────
 activate TP
-TP -> TD : deliverBytes()
+TP -> TD : deliverBytes() [ACK]
 deactivate TP
 
 activate TD
 note right of TD
-  • extractCRA(ACK)  
-  • stop ACK-timer
+  • Extract CRA(ACK, Session ID=0xXX)  
+  • Stop ACK-timer
 end note
-
-TD --> HA : <font color="red">duplicate ACK ignored</font>
-deactivate TD
-
-'─── 5) Host (erroneously) sends duplicate ACK ────────────────
-activate HA
-HA --> HC : sendACK() <<duplicate>>
-deactivate HA
-
-activate HC
-note right of HC
-  • wrapCRA(ACK)  
-  • (duplicate; no timer)
-end note
-
-HC -> HD : wrapCRA(ACK)
-deactivate HC
-
-activate HD
-note right of HD
-  • build duplicate ACK frame
-end note
-
-HD --> HC : ACK_frame_dup
-deactivate HD
-
-activate HC
-HC -> HP : sendFrame(ACK_frame_dup)
-deactivate HC
-
-activate HP
-HP -> TP : UART bytes (ACK) <<duplicate>>
-deactivate HP
-
-activate TP
-TP -> TD : deliverBytes() [duplicate ACK]
-deactivate TP
-
-activate TD
-note right of TD
-  • extractCRA(ACK)  
-  • **duplicate → ignored**
-end note
-
 deactivate TD
 
 @enduml

@@ -1,4 +1,4 @@
-@startuml MultipleRequestsAllSuccess
+@startuml gsp_multiple_requests_all_success
 
 '──────────────────────── Visual settings ────────────────────────
 skinparam ParticipantPadding 120 '
