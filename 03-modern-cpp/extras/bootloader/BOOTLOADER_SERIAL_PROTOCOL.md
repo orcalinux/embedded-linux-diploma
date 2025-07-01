@@ -1,3 +1,7 @@
+Below is the updated version of the General Serial Protocol (GSP) README with detailed field explanations added to the Data Transfer Layer (DTL) section, aligning with the style used in other sections (e.g., Command Frame and Response Frame). The explanations provide clarity on the purpose and behavior of each field, maintaining consistency with the existing documentation structure.
+
+---
+
 # General Serial Protocol (GSP)
 
 ## Document Info
@@ -24,10 +28,12 @@
       - [2.2.2 ACK-only Frame](#222-ack-only-frame)
         - [2.2.2.1 Bit-level layout](#2221-bit-level-layout)
         - [2.2.2.2 Field Explanations — ACK-only Frame](#2222-field-explanations--ack-only-frame)
-    - [2.3 Response Frame](#23-response-frame)
-      - [2.3.1 Bit-level view](#231-bit-level-view)
+    - [2.3 Response Frame (Bit-Field)](#23-response-frame-bit-field)
+      - [2.3.1 Field Explanations](#231-field-explanations)
   - [3 Data Transfer Layer (DTL)](#3-data-transfer-layer-dtl)
     - [3.1 Frame layout](#31-frame-layout)
+      - [Payload Breakdown](#payload-breakdown)
+      - [3.1.1 Field Explanations](#311-field-explanations)
   - [4 Physical Layer](#4-physical-layer)
   - [5 Time-outs \& Retries](#5-time-outs--retries)
     - [5.1 Host Time-outs](#51-host-time-outs)
@@ -141,8 +147,6 @@ GSP uses a four-layer architecture to ensure modularity and flexibility:
 | **0**<br>(Session ID) |     —     |     —     |     —     |     —     |     —     |     —     |     —     |     —     | Echoes the request being acknowledged                           |
 |   **1**<br>(Flags)    |   **0**   |   **0**   |   **0**   |   **0**   |   **0**   |   **1**   |   **0**   |   **0**   | Reserved (5 bits)=0; AF (bit 2)=1 → ACK; Priority (bits 1-0)=00 |
 |  **2**<br>(Command)   |   **0**   |   **0**   |   **0**   |   **0**   |   **0**   |   **0**   |   **0**   |   **0**   | Command Code = 0x00                                             |
-|  **3**<br>(Len LSB)   |   **0**   |   **0**   |   **0**   |   **0**   |   **0**   |   **0**   |   **0**   |   **0**   | Payload Len LSB = 0                                             |
-|  **4**<br>(Len MSB)   |   **0**   |   **0**   |   **0**   |   **0**   |   **0**   |   **0**   |   **0**   |   **0**   | Payload Len MSB = 0                                             |
 
 ##### 2.2.2.2 Field Explanations — ACK-only Frame
 
@@ -151,49 +155,66 @@ GSP uses a four-layer architecture to ensure modularity and flexibility:
 - **AF – Acknowledge Flag (1 bit, bit 2)**: Set to `1` for ACK-only frames (no payload). Priority must be `00`.
 - **Priority (2 bits, bits 1-0)**: Must be **00** in an ACK.
 - **Command (8 bits)**: Fixed to **0x00**.
-- **Payload Len (16 bits, little-endian)**: Fixed to **0x0000**.
+- **No Payload**: ACK-only frames do not contain any payload. The **Payload** section is omitted as the frame is solely for acknowledgment.
 
-### 2.3 Response Frame
+---
 
-| Byte(s) | Field          | Description                                      |
-| :-----: | :------------- | :----------------------------------------------- |
-|    0    | **Session ID** | Mirrors request                                  |
-|    1    | **Status**     | See [§8.2 Status Codes](#82-status-codes)        |
-|   2–3   | **Resp Len**   | Little-endian                                    |
-|    …    | **Payload**    | Optional data (user-defined or command-specific) |
+### 2.3 Response Frame (Bit-Field)
 
-#### 2.3.1 Bit-level view
+![Response Frame Bit-Field](image/frames/gsp_response_frame_bitfield.svg)
 
-| **Session ID** | **Status** | **Resp Len** | **Payload**  |
-| :------------: | :--------: | :----------: | :----------: |
-|     8 bits     |   8 bits   | 16 bits (LE) | 8 × _n_ bits |
+| Byte(s) | Field          | Description                                                               |
+| :-----: | :------------- | :------------------------------------------------------------------------ |
+|    0    | **Session ID** | Echoes the Unique ID from the request, tying each response to its command |
+|    1    | **Status**     | Outcome of the command; see [§8.2 Status Codes](#82-status-codes)         |
+|   2–3   | **Resp Len**   | Payload length in bytes (little-endian)                                   |
+|    …    | **Payload**    | Optional data (user-defined or command-specific)                          |
 
-| Field          | Bits     | Purpose                       |
-| -------------- | -------- | ----------------------------- |
-| **Session ID** | 7 … 0    | Echoes the request.           |
-| **Status**     | 7 … 0    | Result code – see §8.2        |
-| **Resp Len**   | 15 … 0   | Byte-count of Payload.        |
-| **Payload**    | variable | Optional data (0 – 60 bytes). |
+#### 2.3.1 Field Explanations
+
+- **Session ID** (8 bits) – Identifies the session by echoing the command’s unique ID, ensuring the response matches the request.
+- **Status** (8 bits) – Indicates success or error code for the command execution (OK, error, timeout, etc.).
+- **Resp Len** (16 bits) – Byte count of the following payload, encoded little-endian.
+- **Payload** (0–60 bytes) – Contains response-specific or user-defined data; optional based on command type.
 
 ---
 
 ## 3 Data Transfer Layer (DTL)
 
-| Field  | Size    | Description                       |
-| :----: | :------ | :-------------------------------- |
-|  Seq#  | 2 B     | 0–65,535, wraps                   |
-|  Len   | 2 B     | Data length                       |
-|  Data  | 0–256 B | User-defined or aligned to flash  |
-| CRC-16 | 2 B     | CCITT-False over (Seq, Len, Data) |
-|  SLIP  | —       | 0xC0/0xDB framing & escaping      |
+![DTL Packet Format](image/frames/dtl_packet_format.svg)
+
+|  Field   | Size     | Description                                                     |
+| :------: | :------- | :-------------------------------------------------------------- |
+| SLIP END | 8 bits   | Start delimiter (0xC0) with 0xDB escaping                       |
+| Payload  | Variable | Contains CRC EN, Reserved, Command Payload, and optional CRC 16 |
+| SLIP END | 8 bits   | End delimiter (0xC0) with 0xDB escaping                         |
 
 ### 3.1 Frame layout
 
-|  Seq#   |   Len   |   Data    | CRC-16  |           SLIP framing            |
-| :-----: | :-----: | :-------: | :-----: | :-------------------------------: |
-| 16 bits | 16 bits | 0 – 256 B | 16 bits | 0xC0 delimiters with 0xDB escapes |
+| SLIP END (Start) | Payload                                                      | SLIP END (End) |
+| :--------------: | :----------------------------------------------------------- | :------------: |
+|      8 bits      | 8 \* (n + 4) or 8 \* (n + 6) bits + k bits for SLIP encoding |     8 bits     |
 
-> **Note:** Next chunk is sent **only** after an ACK (0x00) is confirmed.
+#### Payload Breakdown
+
+|      Field      | Size              | Description                                         |
+| :-------------: | :---------------- | :-------------------------------------------------- |
+|     CRC EN      | 1 bit             | Enables/disables CRC-16 (1 = enabled, 0 = disabled) |
+|    Reserved     | 7 bits            | Reserved for future use, must be 0                  |
+| Command Payload | 8 \* (n + 3) bits | Command-specific data, including header (n bytes)   |
+|     CRC 16      | 16 bits           | Optional CCITT-False CRC over the payload           |
+
+#### 3.1.1 Field Explanations
+
+- **SLIP END (Start)** (8 bits) – Marks the beginning of the DTL frame using the 0xC0 byte, with 0xDB escaping applied to handle occurrences of 0xC0 or 0xDB within the payload.
+- **Payload** (Variable) – Encapsulates the data content of the frame, including control flags and command data, with a size that varies based on the command length (n bytes) and SLIP encoding overhead (k bits). The total size is either 8 _ (n + 4) or 8 _ (n + 6) bits plus additional bits for SLIP encoding.
+- **SLIP END (End)** (8 bits) – Marks the end of the DTL frame using the 0xC0 byte, ensuring proper frame delineation with 0xDB escaping for data integrity.
+- **CRC EN** (1 bit) – A control bit that enables (1) or disables (0) the inclusion of the CRC-16 field, allowing flexibility in error checking based on application needs.
+- **Reserved** (7 bits) – Reserved for future protocol extensions; must be set to 0 and ignored by the target to ensure compatibility with future updates.
+- **Command Payload** (8 \* (n + 3) bits) – Contains the command-specific data, including a header of n bytes, where n is the length of the command data, providing up to 256 bytes of user-defined or flash-aligned data.
+- **CRC 16** (16 bits) – An optional field that, when enabled by CRC EN, provides a CCITT-False CRC calculated over the payload to detect transmission errors, ensuring data integrity.
+
+> **Note:** The next packet is sent **only** after an ACK (0x00) is confirmed. The CRC 16 field is included only if CRC EN is set to 1.
 
 ---
 
