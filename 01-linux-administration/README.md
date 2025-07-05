@@ -294,7 +294,7 @@ Module 1: **Linux Fundamentals** offers a comprehensive introduction to the Linu
 
 ## Contact and Support
 
-For any queries or support related to this module, please reach out to the course instructor.
+For any questions or support related to this module, please feel free to reach out to me.
 
 ---
 
