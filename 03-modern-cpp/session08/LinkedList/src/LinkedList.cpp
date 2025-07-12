@@ -11,13 +11,13 @@ LinkedList::~LinkedList() {
 }
 
 //–– pushFront ––//
-void LinkedList::pushFront(int v) {
+void LinkedList::push_front(int v) {
     head = new Node(v, head);
     ++count;
 }
 
 //–– pushBack ––//
-void LinkedList::pushBack(int v) {
+void LinkedList::push_back(int v) {
     if (empty()) {
         head = new Node(v, nullptr);
     } else {
@@ -31,7 +31,7 @@ void LinkedList::pushBack(int v) {
 }
 
 //–– popFront ––//
-int LinkedList::popFront() {
+int LinkedList::pop_front() {
     if (empty()) {
         throw std::underflow_error("popFront() on empty list");
     }
@@ -44,7 +44,7 @@ int LinkedList::popFront() {
 }
 
 //–– popBack ––//
-int LinkedList::popBack() {
+int LinkedList::pop_back() {
     if (empty()) {
         throw std::underflow_error("popBack() on empty list");
     }

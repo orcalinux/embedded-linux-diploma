@@ -10,12 +10,12 @@ public:
     ~LinkedList();
 
     // push to front and back
-    void pushFront(int v);
-    void pushBack(int v);
+    void push_front(int v);
+    void push_back(int v);
 
     // pop from front and back; throw if empty
-    int popFront();
-    int popBack();
+    int pop_front();
+    int pop_back();
 
     // peek at front/back without removing; throw if empty
     int front() const;
