@@ -1,115 +1,134 @@
 # Embedded Linux Diploma
 
-Welcome to the **Embedded Linux Diploma** program! This repository serves as the central hub for all materials, resources, and projects necessary to successfully complete the workshop. Whether you're diving into Linux fundamentals, exploring Raspberry Pi projects, or customizing Yocto images, you'll find everything you need here.
+Welcome to the **Embedded Linux Diploma** program!  
+This repository is the central hub for all materials, resources, and projects needed to complete the workshop.  
+Whether you're mastering Linux fundamentals, building Raspberry Pi projects, or customizing Yocto images, everything you need is here.
+
+---
 
 ## Table of Contents
-
 - [Workshop Content](#workshop-content)
   - [1. Linux Administration](#1-linux-administration)
-  - [2. Embedded Linux Module](#2-embedded-linux-module)
-  - [3. Yocto Module](#3-yocto-module)
-  - [4. C++ Module](#4-c-module)
+  - [2. Raspberry Pi Interfacing](#2-raspberry-pi-interfacing)
+  - [3. Modern C++](#3-modern-c)
+  - [4. Yocto Module](#4-yocto-module)
   - [5. Device Drivers (Optional)](#5-device-drivers-optional)
 - [Getting Started](#getting-started)
 - [Guidelines](#guidelines)
 - [Additional Resources](#additional-resources)
 - [Contact](#contact)
 
+---
+
 ## Workshop Content
 
-### 1. Linux Administration 
-- Understanding Linux Kernel Architecture and Spaces
-- Exploring Different Stacks Inside the Kernel
-- Networking and Filesystem Operations
-- Terminal Usage and Shell Scripting
-- Package Management and Common Tasks
+### 1. Linux Administration
+Directory: **`01-linux-administration/`**  
+Topics:
+- Linux Kernel Architecture and User/Kernel Space
+- Kernel stacks overview
+- Networking & Filesystem operations
+- Terminal usage & shell scripting
+- Package management & essential tasks
 
-### 2. Embedded Linux Module
-- Elements of Embedded Linux
-- Toolchain, Bootloader, Kernel, and Root File System
+### 2. Raspberry Pi Interfacing
+Directory: **`02-raspberry-pi-interfacing/`**  
+Topics:
+- Raspberry Pi setup and GPIO
+- Peripheral interfacing
+- Embedded projects using Python/C++
 
-### 3. Yocto Module
-- Understanding Build Systems and Main Components
-- Exploring Different Layers and Terminologies
-- Board Support Package (BSP) and Software Layers
-- Application Development, Debugging, and Testing
+### 3. Modern C++
+Directory: **`03-modern-cpp/`**  
+Topics:
+- C++ fundamentals and STL
+- Software design principles & patterns
+- Concurrency & multithreading
+- Google Test, CMake, and debugging for embedded Linux
 
-### 4. C++ Module
-- Fundamentals, Standard Template Library (STL), and Software Design Principles
-- Object-Oriented Analysis, Design Patterns, and Concurrency
-- Google Testing Framework, CMake, and Debugging Embedded Linux Applications
+### 4. Yocto Module
+Directory: **`04-yocto/`**   
+Topics:
+- Build systems & core components
+- Layers & BSP concepts
+- Application development, debugging & testing
 
 ### 5. Device Drivers (Optional)
-- Extending Linux Functionality
-- Writing Various Device Drivers
+Optional advanced section  
+Topics:
+- Writing Linux device drivers
+- Extending kernel functionality
+
+---
 
 ## Getting Started
 
-Follow these steps to get up and running with the Embedded Linux Diploma program:
+1. **Clone the Repository**
+   ```bash
+   git clone https://github.com/orcalinux/embedded-linux-diploma.git
+````
 
-### 1. Clone the Repository
+2. **Navigate to a Module**
 
-```bash
-git clone https://github.com/orcalinux/embedded-linux-diploma.git
-```
+   ```bash
+   cd embedded-linux-diploma/[module_directory]
+   ```
 
-### 2. Navigate to Respective Modules
+   Replace `[module_directory]` with one of:
 
-Each module is organized into its own directory. Choose the module you wish to start with:
+   * `01-linux-administration`
+   * `02-raspberry-pi-interfacing`
+   * `03-modern-cpp`
+   * `04-yocto`
+   * `device-drivers` (if added)
 
-```bash
-cd embedded-linux-diploma/[module_directory]
-```
+3. **Access Learning Materials**
+   Each module directory contains:
 
-*Replace `[module_directory]` with the desired module folder name (e.g., `linux-administration`, `embedded-linux`, `yocto`, `cpp-module`, `device-drivers`).*
+   * **Learning Materials**: Presentations, notes, and documentation.
+   * **Code Samples**: Example projects and code snippets.
+   * **README.md**: Module-specific instructions.
 
-### 3. Access Learning Materials
+4. **Participate & Engage**
 
-Each module directory contains:
-- **Learning Materials**: Presentations, notes, and documentation.
-- **Code Samples**: Example projects and code snippets.
-- **README.md**: Specific instructions and guidelines for the module.
+   * Join live sessions and discussions.
+   * Use the forum for questions and collaborative learning.
 
-### 4. Participate and Engage
-
-- **Live Sessions**: Attend scheduled live workshops and lectures.
-- **Discussions**: Engage in discussions and Q&A sessions.
-- **Forum**: Utilize the workshop forum for queries and collaborative learning.
+---
 
 ## Guidelines
 
-### Attendance and Participation
-- **Live Sessions**: Attend all scheduled live sessions.
-- **Engagement**: Actively participate in discussions and collaborative activities.
-- **Collaboration**: Work with fellow participants to enhance your learning experience.
+* **Attendance**: Join all scheduled sessions.
+* **Engagement**: Actively participate in Q\&A and collaborative tasks.
+* **Assignments**: Submit work by deadlines with quality and completeness.
+* **Respectful Communication**: Use the forum for queries and maintain professional interaction.
 
-### Assignments and Projects
-- **Deadlines**: Complete all assignments and projects by the specified deadlines.
-- **Quality**: Strive for high-quality submissions and thorough understanding.
-- **Support**: Seek assistance if you encounter challenges.
-
-### Communication
-- **Forum Usage**: Use the workshop forum for all queries and discussions related to the content.
-- **Respect**: Maintain respectful and professional communication at all times.
-- **Feedback**: Provide and receive constructive feedback to and from peers.
-
-### Certification
-- **Completion Criteria**: Successfully complete all modules and assessments.
-- **Certification**: Receive your certificate upon fulfilling all requirements.
+---
 
 ## Additional Resources
 
-- **Documentation**
-  - [Linux Kernel Documentation](https://www.kernel.org/doc/html/latest/)
-  - [Yocto Project Documentation](https://docs.yoctoproject.org/)
+* **Documentation**
 
-- **Online Communities**
-  - [Stack Overflow](https://stackoverflow.com/)
-  - [Embedded Linux Wiki](https://elinux.org/Main_Page)
+  * [Linux Kernel Docs](https://www.kernel.org/doc/html/latest/)
+  * [Yocto Project Docs](https://docs.yoctoproject.org/)
+* **Communities**
 
-- **Books and Tutorials**
-  - *The Linux Programming Interface* by Michael Kerrisk
-  - *Linux Device Drivers* by Jonathan Corbet, Alessandro Rubini, and Greg Kroah-Hartman
-  - *Embedded Linux Primer* by Christopher Hallinan
-  - [A practical guide to BitBake](https://a4z.gitlab.io/docs/BitBake/guide.html)
-  - [Yocto Project Quick Start](https://docs.yoctoproject.org/2.4.2/yocto-project-qs/yocto-project-qs.html)
+  * [Stack Overflow](https://stackoverflow.com/)
+  * [Embedded Linux Wiki](https://elinux.org/Main_Page)
+* **Recommended Reading**
+
+  * *The Linux Programming Interface* — Michael Kerrisk
+  * *Linux Device Drivers* — Corbet, Rubini, Kroah-Hartman
+  * *Embedded Linux Primer* — Christopher Hallinan
+  * [BitBake Practical Guide](https://a4z.gitlab.io/docs/BitBake/guide.html)
+  * [Yocto Project Quick Start](https://docs.yoctoproject.org/2.4.2/yocto-project-qs/yocto-project-qs.html)
+
+---
+
+## Contact
+
+For inquiries or collaboration, open an issue or use the repository’s discussions tab.
+
+---
+
+**License**: MIT
