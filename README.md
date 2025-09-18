@@ -14,7 +14,6 @@ Whether you're mastering Linux fundamentals, building Raspberry Pi projects, or 
   - [4. Yocto Module](#4-yocto-module)
   - [5. Device Drivers (Optional)](#5-device-drivers-optional)
 - [Getting Started](#getting-started)
-- [Guidelines](#guidelines)
 - [Additional Resources](#additional-resources)
 - [Contact](#contact)
 
@@ -92,15 +91,6 @@ Topics:
 
    * Join live sessions and discussions.
    * Use the forum for questions and collaborative learning.
-
----
-
-## Guidelines
-
-* **Attendance**: Join all scheduled sessions.
-* **Engagement**: Actively participate in Q\&A and collaborative tasks.
-* **Assignments**: Submit work by deadlines with quality and completeness.
-* **Respectful Communication**: Use the forum for queries and maintain professional interaction.
 
 ---
 
