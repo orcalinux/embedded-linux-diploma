@@ -66,7 +66,6 @@ Topics:
 1. **Clone the Repository**
    ```bash
    git clone https://github.com/orcalinux/embedded-linux-diploma.git
-````
 
 2. **Navigate to a Module**
 
